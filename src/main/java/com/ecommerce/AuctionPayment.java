@@ -1,4 +1,4 @@
-package auctionapp;
+package com.ecommerce;
 
 /**
  * (UC4) - after auction ends, AuctionPayment class gets information about payment and shipping in order to deliver the "Pay now" page.
@@ -32,3 +32,4 @@ public class AuctionPayment {
 	
 	
 }
+
