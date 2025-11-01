@@ -21,7 +21,6 @@ public class Payment {
 	private String cardHolderName;
 	private String cardNumber;
 	private String cardType;
-	private String cardToken; 
 	private String expiryDate; 
 
 	public Payment(
@@ -40,7 +39,6 @@ public class Payment {
 			String cardHolderName,
 			String cardNumber,
 			String cardType,
-			String cardToken,
 			String expiryDate
 	) {
 		this.paymentId = paymentId;
@@ -58,7 +56,6 @@ public class Payment {
 		this.cardHolderName = cardHolderName;
 		this.cardNumber = cardNumber;
 		this.cardType = cardType;
-		this.cardToken = cardToken;
 		this.expiryDate = expiryDate;
 	}
     
@@ -107,9 +104,6 @@ public class Payment {
 
     public String getCardType() { return cardType; }
     public void setCardType(String cardType) { this.cardType = cardType; }
-
-    public String getCardToken() { return cardToken; }
-    public void setCardToken(String cardToken) { this.cardToken = cardToken; }
 
     public String getExpiryDate() { return expiryDate; }
     public void setExpiryDate(String expiryDate) { this.expiryDate = expiryDate; }
