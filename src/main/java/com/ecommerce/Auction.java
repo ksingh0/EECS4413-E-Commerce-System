@@ -1,4 +1,4 @@
-package auctionapp;
+package com.ecommerce;
 
 import java.util.Timer;
 
@@ -74,3 +74,4 @@ public class Auction {
 		return this.endTime;
 	}
 }
+
