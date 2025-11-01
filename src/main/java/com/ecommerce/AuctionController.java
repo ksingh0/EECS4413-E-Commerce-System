@@ -42,9 +42,7 @@ public class AuctionController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void createAuction(Auction auction) {
 		//call to DAO to create new auction (e.g. newly updated item)
-		if (auctionDAO.create(auction)) {
-			auction.createTimer();
-		} //create a timer for each auction that is created - only if auction is actually successfully created.
+		auction.createTimer();
 	}
 	
 	@PUT
@@ -69,5 +67,6 @@ public class AuctionController {
 	}
 	
 }
+
 
 
