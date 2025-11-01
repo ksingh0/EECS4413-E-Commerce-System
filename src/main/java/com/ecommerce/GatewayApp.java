@@ -1,7 +1,7 @@
 package com.ecommerce;
 
 public class GatewayApp {
-
+	private PaymentDAO paymentDAO = new PaymentDAO();
 	
 	//To be implemented when databases are added
 	// Also need to add new dbs to context for DatabaseConncetion.java
