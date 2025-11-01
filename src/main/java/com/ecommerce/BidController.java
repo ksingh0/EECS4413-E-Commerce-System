@@ -1,4 +1,4 @@
-package auctionapp;
+package com.ecommerce;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,3 +78,4 @@ public class BidController {
 	}
 	
 }
+
