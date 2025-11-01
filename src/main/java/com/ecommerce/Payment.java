@@ -1,52 +1,67 @@
 package com.ecommerce;
 
 public class Payment {
-    private int paymentId;
-    private int userId;
-    private int auctionId;
-    private double amount;
-    private String paymentTime;
-    private String status; // e.g., PENDING, COMPLETED, FAILED
 
-    // Billing details
-    private String billingName;
-    private String billingAddress;
-    private String city;
-    private String state;
-    private String postalCode;
-    private String country;
+	private int paymentId;
+	private int userId;
+	private int auctionId;
+	private double amount;
+	private String paymentTime;
+	private String status; // e.g., PENDING, COMPLETED, FAILED
 
-    // Credit card details 
-    private String cardHolderName;
-    private String cardNumber;
-    private String cardType; 
-    private String cardToken; 
-    private String expiryDate; 
+	// Billing info
+	private String billingName;
+	private String billingAddress;
+	private String city;
+	private String state;
+	private String postalCode;
+	private String country;
 
-    public Payment() {}
+	// Credit card info 
+	private String cardHolderName;
+	private String cardNumber;
+	private String cardType;
+	private String cardToken; 
+	private String expiryDate; 
 
-    public Payment(int paymentId, int userId, int auctionId, double amount, String paymentTime, String status,
-                   String billingName, String billingAddress, String city, String state, String postalCode, String country,
-                   String cardHolderName, String cardLastFourDigits, String cardType, String cardToken, String expiryDate) {
-        this.paymentId = paymentId;
-        this.userId = userId;
-        this.auctionId = auctionId;
-        this.amount = amount;
-        this.paymentTime = paymentTime;
-        this.status = status;
-        this.billingName = billingName;
-        this.billingAddress = billingAddress;
-        this.city = city;
-        this.state = state;
-        this.postalCode = postalCode;
-        this.country = country;
-        this.cardHolderName = cardHolderName;
-        this.cardNumber = cardLastFourDigits;
-        this.cardType = cardType;
-        this.cardToken = cardToken;
-        this.expiryDate = expiryDate;
-    }
-
+	public Payment(
+			int paymentId,
+			int userId,
+			int auctionId,
+			double amount,
+			String paymentTime,
+			String status,
+			String billingName,
+			String billingAddress,
+			String city,
+			String state,
+			String postalCode,
+			String country,
+			String cardHolderName,
+			String cardLastFourDigits,
+			String cardType,
+			String cardToken,
+			String expiryDate
+	) {
+		this.id = id;
+		this.userId = userId;
+		this.auctionId = auctionId;
+		this.amount = amount;
+		this.paymentTime = paymentTime;
+		this.status = status;
+		this.billingName = billingName;
+		this.billingAddress = billingAddress;
+		this.city = city;
+		this.state = state;
+		this.postalCode = postalCode;
+		this.country = country;
+		this.cardHolderName = cardHolderName;
+		this.cardLastFourDigits = cardLastFourDigits;
+		this.cardType = cardType;
+		this.cardToken = cardToken;
+		this.expiryDate = expiryDate;
+	}
+    
     // Getters and Setters
     public int getPaymentId() { return paymentId; }
     public void setPaymentId(int id) { this.paymentId = id; }
