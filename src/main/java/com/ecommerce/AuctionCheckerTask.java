@@ -1,4 +1,4 @@
-package auctionapp;
+package com.ecommerce;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -44,3 +44,4 @@ public class AuctionCheckerTask implements Runnable {
 	}
 
 }
+
