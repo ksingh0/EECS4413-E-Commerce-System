@@ -1,4 +1,4 @@
-package auctionapp;
+package com.ecommerce;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,3 +29,4 @@ public class AuctionManager {
 	}
 	
 }
+
