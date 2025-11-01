@@ -43,7 +43,7 @@ public class Payment {
 			String cardToken,
 			String expiryDate
 	) {
-		this.id = id;
+		this.paymentId = paymentId;
 		this.userId = userId;
 		this.auctionId = auctionId;
 		this.amount = amount;
@@ -56,7 +56,7 @@ public class Payment {
 		this.postalCode = postalCode;
 		this.country = country;
 		this.cardHolderName = cardHolderName;
-		this.cardLastFourDigits = cardLastFourDigits;
+		this.cardNumber = cardNumber;
 		this.cardType = cardType;
 		this.cardToken = cardToken;
 		this.expiryDate = expiryDate;
