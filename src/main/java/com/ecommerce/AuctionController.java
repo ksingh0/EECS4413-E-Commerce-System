@@ -2,8 +2,6 @@ package com.ecommerce;
 
 import java.util.List;
 
-import auctionapp.Auction;
-
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -71,4 +69,5 @@ public class AuctionController {
 	}
 	
 }
+
 
