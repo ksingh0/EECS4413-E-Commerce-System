@@ -116,7 +116,6 @@ public class DAO {
 				//Check if result was returned
 				if (rs.next()) {
 					auction = new Auction();
-					//set properties of the student object
 					auction.setID(id);				
 					auction.setEndTime(rs.getInt("AuctionEndtime"));
 					auction.setHighestPrice(rs.getDouble("HighestPrice"));
@@ -129,6 +128,30 @@ public class DAO {
 				System.out.println(e.getMessage());
 			}
 		return auction;
+	}
+
+	//get Bid with BidID = id
+	public Bid readBid(int id) {
+		String sql = "SELECT BidID, AuctionID, UserID, BidTime, BidAmount FROM Bids WHERE BidID = ?";
+		Bid bid = null;
+		
+		try (Connection conn = DatabaseConnection.connect();
+			PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1,  id);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					bid = new Bid();
+					bid.setBidID(id);			
+					bid.setAuctionID(rs.getInt("AuctionID"));
+					bid.setUserID(rs.getInt("UserID"));
+					bid.setBidTime(rs.getLong("BidTime"));
+					bid.setAmount(rs.getDouble("BidAmount"));
+				}}}
+		
+			catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		return bid;
 	}
 	
 	//update auction when a bid is made to reflect NEW HIGHEST BID + PRICE***
@@ -183,5 +206,6 @@ public class DAO {
 	}
 
 }
+
 
 
