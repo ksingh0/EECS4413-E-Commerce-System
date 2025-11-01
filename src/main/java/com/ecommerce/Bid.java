@@ -1,4 +1,4 @@
-package auctionapp;
+package com.ecommerce;
 
 /**
  * Bid model class - Transfer Object
@@ -71,3 +71,4 @@ public class Bid {
 	}
 	
 }
+
