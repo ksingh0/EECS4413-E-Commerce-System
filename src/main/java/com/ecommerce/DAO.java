@@ -44,14 +44,13 @@ public class DAO {
 	}
 	
 	public void createBid(Bid bid) {
-		String sql = "INSERT INTO Bids(BidID, AuctionID, UserID, BidTime, BidAmount) VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Bids(AuctionID, UserID, BidTime, BidAmount) VALUES (?, ?, ?, ?)";
 		try (Connection conn = DatabaseConnection.connect();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
-				pstmt.setInt(1, bid.getBidID());
-				pstmt.setInt(2,  bid.getAuctionID());
-				pstmt.setInt(3,  bid.getUserID());
-				pstmt.setLong(4, System.currentTimeMillis()/1000);
-				pstmt.setDouble(5,  bid.getAmount());
+				pstmt.setInt(1,  bid.getAuctionID());
+				pstmt.setInt(2,  bid.getUserID());
+				pstmt.setLong(3, System.currentTimeMillis()/1000);
+				pstmt.setDouble(4,  bid.getAmount());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
@@ -85,14 +84,13 @@ public class DAO {
 	
 	//create a new auction
 	public boolean create(Auction auction) {
-		String sql = "INSERT INTO Auction(AuctionID, AuctionEndtime, HighestPrice, HighestBidID, ItemID) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO Auction(AuctionEndtime, HighestPrice, HighestBidID, ItemID) VALUES (?,?,?,?)";
 		try (Connection conn = DatabaseConnection.connect();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, auction.getId());
-			pstmt.setLong(2, auction.getEndTime());
-			pstmt.setDouble(3,  auction.getHighestPrice());
-			pstmt.setInt(4,  auction.getHighestBidID());
-			pstmt.setInt(5,  auction.getItemID());
+			pstmt.setLong(1, auction.getEndTime());
+			pstmt.setDouble(2,  auction.getHighestPrice());
+			pstmt.setInt(3,  auction.getHighestBidID());
+			pstmt.setInt(4,  auction.getItemID());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -185,4 +183,5 @@ public class DAO {
 	}
 
 }
+
 
