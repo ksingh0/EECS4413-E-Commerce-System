@@ -33,11 +33,11 @@ public class BidController {
 	}
 	
 	@GET
-	@Path("/{bidID}")
+	@Path("/bid/{bidID}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Bid getBid(@PathParam("bidID") int bidID) {
 		//DAO; get a specific bid - e.g. the highest bid
-		return new Bid();
+		return dao.readBid(bidID);
 	}
 	
 	@POST
@@ -75,5 +75,6 @@ public class BidController {
 	}
 	
 }
+
 
 
