@@ -38,7 +38,7 @@ public class Payment {
 			String postalCode,
 			String country,
 			String cardHolderName,
-			String cardLastFourDigits,
+			String cardNumber,
 			String cardType,
 			String cardToken,
 			String expiryDate
@@ -102,8 +102,8 @@ public class Payment {
     public String getCardHolderName() { return cardHolderName; }
     public void setCardHolderName(String cardHolderName) { this.cardHolderName = cardHolderName; }
 
-    public String getCardLastFourDigits() { return cardNumber; }
-    public void setCardLastFourDigits(String cardLastFourDigits) { this.cardNumber = cardLastFourDigits; }
+    public String getCardNumber() { return cardNumber; }
+    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
 
     public String getCardType() { return cardType; }
     public void setCardType(String cardType) { this.cardType = cardType; }
