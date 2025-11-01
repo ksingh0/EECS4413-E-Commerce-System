@@ -10,7 +10,22 @@ public class GatewayApp {
 	}
 	
 	public Bid getBids() {
-		
 		return new Bid(0,0,0,0,0);
 	}
+
+    public Payment getPayment(int id) {
+        return paymentDAO.getPaymentById(id);
+    }
+	
+    public List<Payment> getAllPayments() {
+        return paymentDAO.getAllPayments();
+    }
+
+    public void createPayment(Payment payment) {
+        paymentDAO.createPayment(payment);
+    }
+
+    public void updatePaymentStatus(int id, String status) {
+        paymentDAO.updatePaymentStatus(id, status);
+    }
 }
