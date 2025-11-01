@@ -18,12 +18,7 @@ CREATE TABLE IF NOT EXISTS payments (
     card_holder_name TEXT,
     card_number TEXT, 
     card_type TEXT,
-    card_token TEXT,
     expiry_date TEXT,
-
-    -- Timestamps
-    created_at TEXT DEFAULT (datetime('now')),
-    updated_at TEXT DEFAULT (datetime('now')),
 
     -- (Foreign keys are supported in SQLite 3.6.19+)
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
