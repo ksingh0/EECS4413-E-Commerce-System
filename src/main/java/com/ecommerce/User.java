@@ -1,5 +1,7 @@
 package com.ecommerce;
 
+import org.glassfish.jersey.message.filtering.EntityFiltering;
+
 public class User {
 private Long id;
 private String username;
@@ -11,10 +13,11 @@ private String streetNumber;
 private String city;
 private String postalCode;
 private String country;
+private boolean isSeller;
 
+public User(){}
 public User(Long id, String username, String password, String firstName, String lastName,
-        String streetName, String streetNumber, String city, String postalCode, String country) {
-    super();
+        String streetName, String streetNumber, String city, String postalCode, String country, boolean isSeller) {
     this.id = id;
     this.username = username;
     this.password = password;
@@ -25,6 +28,7 @@ public User(Long id, String username, String password, String firstName, String 
     this.city = city;
     this.postalCode = postalCode;
     this.country = country;
+    this.isSeller = isSeller;
 }
 
 public Long getId() {
@@ -87,4 +91,18 @@ public String getCountry() {
 public void setCountry(String country) {
     this.country = country;
 } 
+public boolean isSeller() {
+    return isSeller;
 }
+public void setSeller(boolean isSeller) {
+    this.isSeller = isSeller;
+} 
+
+@Override
+public String toString() {
+    return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
+            + ", lastName=" + lastName + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", city="
+            + city + ", postalCode=" + postalCode + ", country=" + country + ", isSeller=" + isSeller + "]";
+}
+}
+
