@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Catalogue {
 	//model class for items in Catalogue
+	//Naming from JSON requests
 	@JsonProperty("item_id")
 	private int item_id; 
 	@JsonProperty("item_name")
