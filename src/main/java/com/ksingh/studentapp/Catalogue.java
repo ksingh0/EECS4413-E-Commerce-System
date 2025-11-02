@@ -23,6 +23,10 @@ public class Catalogue {
 	private String end_date;
 	@JsonProperty("initial_price")
 	private double initial_price;
+	@JsonProperty("shipping_cost")
+	private double shipping_cost;
+	@JsonProperty("expedited_shipping")
+	private double expedited_shipping;
 	
 	//getters and setters
 	public int getItemID() {
@@ -95,6 +99,22 @@ public class Catalogue {
 	
 	public void setInitialPrice(double initial_price) {
 		this.initial_price = initial_price;
+	}
+	
+	public double getShippingCost() {
+		return shipping_cost;
+	}
+	
+	public void setShippingCost(double shipping_cost) {
+		this.shipping_cost = shipping_cost;
+	}
+	
+	public double getExpeditedShipping() {
+		return expedited_shipping;
+	}
+	
+	public void setExpeditedShipping(double expedited_shipping) {
+		this.expedited_shipping = expedited_shipping;
 	}
 }
 

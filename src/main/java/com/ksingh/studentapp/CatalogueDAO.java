@@ -10,7 +10,7 @@ public class CatalogueDAO {
 	
 	public List<Catalogue> readAllItems() {
 		//Columns in items table from Catalogue Database
-		String sql = "SELECT item_id, item_name, current_bid, auction_type, remaining_time, item_description, shipping_time, end_date, initial_price FROM items";
+		String sql = "SELECT item_id, item_name, current_bid, auction_type, remaining_time, item_description, shipping_time, end_date, initial_price, shipping_cost, expedited_shipping FROM items";
 		List<Catalogue> items = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect();
@@ -28,6 +28,8 @@ public class CatalogueDAO {
 				item.setShippingTime(rs.getString("shipping_time"));
 				item.setEndDate(rs.getString("end_date"));
 				item.setInitialPrice(rs.getDouble("initial_price"));
+				item.setShippingCost(rs.getDouble("shipping_cost"));
+				item.setExpeditedShipping(rs.getDouble("expedited_shipping"));
 				items.add(item);
 			}
 		} catch (SQLException e) {
@@ -37,7 +39,7 @@ public class CatalogueDAO {
 	}
 	public Catalogue createItem(Catalogue item) {
 		//Insert new item into database
-		String sql = "INSERT INTO items (item_name, current_bid, auction_type, remaining_time, item_description, shipping_time, end_date, initial_price) VALUES(?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO items (item_name, current_bid, auction_type, remaining_time, item_description, shipping_time, end_date, initial_price, shipping_cost, expedited_shipping) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -49,6 +51,8 @@ public class CatalogueDAO {
 			pstmt.setString(6, item.getShippingTime());
 			pstmt.setString(7, item.getEndDate());
 			pstmt.setDouble(8, item.getInitialPrice());
+			pstmt.setDouble(9, item.getShippingCost());
+			pstmt.setDouble(10, item.getExpeditedShipping());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -58,7 +62,7 @@ public class CatalogueDAO {
 	
 	public Catalogue readItem(int id) {
 		// Read specific item by ID from Catalogue
-		String sql = "SELECT item_name, current_bid, auction_type, remaining_time, item_description, shipping_time, end_date, initial_price FROM items WHERE item_id = ?";
+		String sql = "SELECT item_name, current_bid, auction_type, remaining_time, item_description, shipping_time, end_date, initial_price, shipping_cost, expedited_shipping FROM items WHERE item_id = ?";
 		Catalogue item = null;
 		
 		try (Connection conn = DatabaseConnection.connect();
@@ -78,6 +82,9 @@ public class CatalogueDAO {
 					item.setShippingTime(rs.getString("shipping_time"));
 					item.setEndDate(rs.getString("end_date"));
 					item.setInitialPrice(rs.getDouble("initial_price"));
+					item.setShippingCost(rs.getDouble("shipping_cost"));
+					item.setExpeditedShipping(rs.getDouble("expedited_shipping"));
+					
 				}
 			}
 		} catch (SQLException e) {
@@ -87,7 +94,7 @@ public class CatalogueDAO {
 	}
 	public Catalogue updateItem(int id, Catalogue item) {
 		//update specific item by ID from Catalogue
-		String sql = "UPDATE items SET item_name = ?, current_bid = ?, auction_type = ?, remaining_time = ?, item_description = ?, shipping_time = ?, end_date = ?, initial_price = ? WHERE item_id =?";
+		String sql = "UPDATE items SET item_name = ?, current_bid = ?, auction_type = ?, remaining_time = ?, item_description = ?, shipping_time = ?, end_date = ?, initial_price = ?, shipping_cost = ?, expedited_shipping = ? WHERE item_id =?";
 
 						try (Connection conn = DatabaseConnection.connect();
 							PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -99,7 +106,9 @@ public class CatalogueDAO {
 							pstmt.setString(6, item.getShippingTime());
 							pstmt.setString(7, item.getEndDate());
 							pstmt.setDouble(8, item.getInitialPrice());
-							pstmt.setInt(9, id);
+							pstmt.setDouble(9, item.getShippingCost());
+							pstmt.setDouble(10, item.getExpeditedShipping());
+							pstmt.setInt(1, id);
 							//update the item record
 							pstmt.executeUpdate();
 						} catch (SQLException e) {
