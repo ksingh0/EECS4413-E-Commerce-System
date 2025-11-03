@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "84bd2327-3d91-4a5c-ac3f-56034bc94789",
+		"name": "CatalogueAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48275140",
+		"_collection_link": "https://kim29-777407f7-2058581.postman.co/workspace/Kimberly-Bonilla's-Workspace~e683e1af-663e-4fa6-83fa-31f51ef4221d/collection/48275140-84bd2327-3d91-4a5c-ac3f-56034bc94789?action=share&source=collection_link&creator=48275140"
+	},
+	"item": [
+		{
+			"name": "item",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"itemName\": \"Wireless Keyboard\",\n  \"itemDescription\": \"Bluetooth keyboard compatible with multiple devices\",\n  \"initialPrice\": 70.00,\n  \"currentBid\": 150.00,\n  \"endDate\": \"2025-11-10\",\n  \"remainingTime\": 8,\n  \"auctionType\": \"forward\",\n  \"shippingTime\": \"5-7 business days\",\n  \"shippingCost\": 10.99,\n  \"expeditedShipping\": 19.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all items",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "item by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"item",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update item by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"itemName\": \"Wireless Keyboard pro\",\n  \"itemDescription\": \"Updated Bluetooth keyboard pro compatible with multiple devices\",\n  \"initialPrice\": 90.00,\n  \"currentBid\": 150.00,\n  \"endDate\": \"2025-11-10\",\n  \"remainingTime\": 8,\n  \"auctionType\": \"forward\",\n  \"shippingTime\": \"5-7 business days\",\n  \"shippingCost\": 10.99,\n  \"expeditedShipping\": 19.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"item",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete item by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"item",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
