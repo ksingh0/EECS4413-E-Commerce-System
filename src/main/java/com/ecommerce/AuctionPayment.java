@@ -19,11 +19,13 @@ public class AuctionPayment {
 	
 	//need to get Shipping info from CatalogueDB + Expedited shipping info
 	public double getShipping() {
-		return 0.0;
+		CatalogueDAO cdao = new CatalogueDAO();
+		return cdao.readItem(auction.getItemID()).getShippingCost();
 	}
 	
 	public double getExpeditedShipping() {
-		return 0.0;
+		CatalogueDAO cdao = new CatalogueDAO();
+		return cdao.readItem(auction.getItemID()).getExpeditedShipping();
 	}
 	
 	public boolean verifyWinner(int userID) {
