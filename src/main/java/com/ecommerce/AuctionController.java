@@ -34,6 +34,7 @@ public class AuctionController {
 	public Auction getAuction(@PathParam("AuctionID") int AuctionID) {
 		//call to DAO to retrieve a specific auction by ID
 		Auction auction =  auctionDAO.read(AuctionID);
+		
 		return auction;
 	}
 	
@@ -43,6 +44,7 @@ public class AuctionController {
 	public void createAuction(Auction auction) {
 		//call to DAO to create new auction (e.g. newly updated item)
 		auction.createTimer();
+		auctionDAO.create(auction);
 	}
 	
 	@PUT

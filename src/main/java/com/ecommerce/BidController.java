@@ -2,6 +2,7 @@ package com.ecommerce;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -12,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  *  BidController makes calls to the DAO (GatewayApp) to get bids from DB
@@ -44,16 +46,24 @@ public class BidController {
 	@Path("/bid")
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void makeBid(Bid bid) {
+	public Response makeBid(Bid bid) {
 		// DAO 
 		// make bid based on auctionID ; update that auctionID to reflect new highest bid
 		Auction a = dao.read(bid.getAuctionID());
-		bid.verifyBid(a); //verify bid - this will throw an exception if bid is not higher than current highest
+		if (a == null) {
+            return Response.status(400).entity(Map.of("error", "Auction does not exist.")).build();
+		}
+		int i = bid.verifyBid(a); //verify bid - this will throw an exception if bid is not higher than current highest
+		if (i==1) {
+            return Response.status(400).entity(Map.of("error", "Bid amount must be greater than the current highest bid!")).build();
+		} else if (i==2) {
+            return Response.status(400).entity(Map.of("error", "This auction has ended; bids are no longer accepted.")).build();
+		}
 		dao.createBid(bid); 
 		a.setHighestBidID(bid.getBidID());
 		a.setHighestPrice(bid.getAmount());
 		dao.updateAuction(a.getId(), a); //update auction with the new highestBidID and highestPrice
-		
+		return Response.status(201).entity("Bid was successful.").build();
 	}
 	
 	@PUT

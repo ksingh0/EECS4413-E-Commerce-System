@@ -17,13 +17,17 @@ public class Bid {
 	}
 	
 	//verify
-	public void verifyBid(Auction auction) {
+	public int verifyBid(Auction auction) {
 		if (this.getAmount() <= auction.getHighestPrice()) {
-			throw new IllegalArgumentException("Bid amount must be greater than the current highest bid!");
+			return 1;
+//			throw new IllegalArgumentException("Bid amount must be greater than the current highest bid!");
 		}
 		if (auction.isEnded()) {
-			throw new RuntimeException("This auction has ended; bids are no longer accepted.");
+			return 2;
+//			throw new RuntimeException("This auction has ended; bids are no longer accepted.");
 		}
+		
+		return 0;
 		
 	}
 	

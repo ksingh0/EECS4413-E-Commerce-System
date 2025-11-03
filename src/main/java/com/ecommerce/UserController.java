@@ -41,6 +41,7 @@ public class UserController {
             user.getCity() == null || user.getCountry() == null ||
             user.getPostalCode() == null) {
             return Response.status(400).entity(Map.of("error", "All fields required")).build();
+//        	return Response.status(400).entity(user.toString()).build();
         }
 
         if (userDAO.existsByUsername(user.getUsername())) {

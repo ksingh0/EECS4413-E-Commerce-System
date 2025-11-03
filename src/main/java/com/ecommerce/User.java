@@ -43,11 +43,11 @@ public String getUsername() {
 public void setUsername(String username) {
     this.username = username;
 }
-@JsonIgnore
+
 public String getPassword() {
     return password;
 }
-@JsonIgnore
+
 public void setPassword(String password) {
     this.password = password;
 }

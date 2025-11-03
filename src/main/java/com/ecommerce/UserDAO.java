@@ -8,7 +8,7 @@ public class UserDAO {
 // CHECK if username exists
 	public boolean existsByUsername(String username) {
 		String sql = "SELECT 1 FROM users WHERE username = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, username);
 			return ps.executeQuery().next();
@@ -20,7 +20,7 @@ public class UserDAO {
 	// CREATE User
 	public User create(User user) {
 		String sql = "INSERT INTO users (username, password, first_name, last_name, street_name, street_number, city, country, postal_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPassword());
@@ -46,7 +46,7 @@ public class UserDAO {
 	// READ by id (fetch a user by Id)
 	public User findById(long id) {
 		String sql = "SELECT * FROM users WHERE id = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setLong(1, id);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -75,7 +75,7 @@ public class UserDAO {
 	public List<User> findAll() {
 		String sql = "SELECT * FROM users";
 		List<User> users = new ArrayList<>();
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 Statement stmt = conn.createStatement();
 			 ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
@@ -101,7 +101,7 @@ public class UserDAO {
 	// UPDATE a USER by id
 	public User update(long id, User user) {
 		String sql = "UPDATE users SET username = ?, password = ?, first_name = ?, last_name = ?, street_name = ?, street_number = ?, city = ?, country = ?, postal_code = ? WHERE id = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPassword());
@@ -124,7 +124,7 @@ public class UserDAO {
 	// DELETE A USER by id
 	public void delete(long id) {
 		String sql = "DELETE FROM users WHERE id = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setLong(1, id);
 			ps.executeUpdate();
@@ -136,7 +136,7 @@ public class UserDAO {
 	// READ by username (fetch a user by username)
 	public User findByUsername(String username) {
 		String sql = "SELECT * FROM users WHERE username = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectUsers();
 			 PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, username);
 			try (ResultSet rs = ps.executeQuery()) {
