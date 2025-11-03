@@ -21,5 +21,5 @@ public class GatewayApp extends Application {
 //	    resources.add(com.ecommerce.AuctionController.class);
 //	    return resources;
 //	}
-	
+
 }
