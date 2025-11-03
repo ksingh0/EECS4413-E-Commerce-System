@@ -108,7 +108,7 @@ public class CatalogueDAO {
 							pstmt.setDouble(8, item.getInitialPrice());
 							pstmt.setDouble(9, item.getShippingCost());
 							pstmt.setDouble(10, item.getExpeditedShipping());
-							pstmt.setInt(1, id);
+							pstmt.setInt(11, id);
 							//update the item record
 							pstmt.executeUpdate();
 						} catch (SQLException e) {
