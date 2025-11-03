@@ -11,7 +11,7 @@ public class DAO {
 		String sql = "SELECT BidID, BidTime, BidAmount, UserID FROM Bids WHERE AuctionID = ?";
 		List<Bid> bids = new ArrayList<Bid>();
 		
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				
 				//Set the corresponding parameter (AuctionID)
@@ -45,7 +45,7 @@ public class DAO {
 	
 	public void createBid(Bid bid) {
 		String sql = "INSERT INTO Bids(AuctionID, UserID, BidTime, BidAmount) VALUES (?, ?, ?, ?)";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setInt(1,  bid.getAuctionID());
 				pstmt.setInt(2,  bid.getUserID());
@@ -61,7 +61,7 @@ public class DAO {
 		String sql = "SELECT AuctionID, AuctionEndtime, HighestPrice, HighestBidID, ItemID FROM Auction";
 		List<Auction> auctions = new ArrayList<>();
 		
-		try (Connection conn = DatabaseConnection.connect(); 
+		try (Connection conn = DatabaseConnection.connectAuction(); 
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql)) 
 			{	
@@ -85,7 +85,7 @@ public class DAO {
 	//create a new auction
 	public boolean create(Auction auction) {
 		String sql = "INSERT INTO Auction(AuctionEndtime, HighestPrice, HighestBidID, ItemID) VALUES (?,?,?,?)";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setLong(1, auction.getEndTime());
 			pstmt.setDouble(2,  auction.getHighestPrice());
@@ -104,7 +104,7 @@ public class DAO {
 		String sql = "SELECT AuctionID, AuctionEndtime, HighestPrice, HighestBidID, ItemID FROM Auction WHERE AuctionID = ?";
 		Auction auction = null;
 		
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			
 			//Set the corresponding parameter (AuctionID)
@@ -135,7 +135,7 @@ public class DAO {
 		String sql = "SELECT BidID, AuctionID, UserID, BidTime, BidAmount FROM Bids WHERE BidID = ?";
 		Bid bid = null;
 		
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1,  id);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -159,7 +159,7 @@ public class DAO {
 		//use prepared statement
 		String sql = "UPDATE Auction SET HighestPrice = ?, HighestBidID = ? WHERE AuctionID = ?";
 		
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			//set parameters
 			pstmt.setDouble(1, auction.getHighestPrice());
@@ -175,7 +175,7 @@ public class DAO {
 	//auction cancelled
 	public void deleteAuction(int id) {
 		String sql = "DELETE FROM Auction WHERE AuctionID = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			
 			//set parameters
@@ -193,7 +193,7 @@ public class DAO {
 	//delete all bids for a specified Auction - e.g. when auction is cancelled (possibly if auction has been completed for x amount of time)
 	public void deleteBids(int id) {
 		String sql = "DELETE FROM Bids WHERE AuctionID = ?";
-		try (Connection conn = DatabaseConnection.connect();
+		try (Connection conn = DatabaseConnection.connectAuction();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			
 			//set parameters

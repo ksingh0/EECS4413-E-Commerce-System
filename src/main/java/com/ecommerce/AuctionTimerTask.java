@@ -1,5 +1,4 @@
-package auctionapp;
-
+package com.ecommerce;
 import java.util.TimerTask;
 
 public class AuctionTimerTask extends TimerTask {
