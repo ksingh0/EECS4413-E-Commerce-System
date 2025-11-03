@@ -46,4 +46,22 @@ public class DatabaseConnection {
         }
         return conn;
 	}
+	
+	public static Connection connectPayment() {
+		Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            //Get the path of the database relative to the project
+            String dbPath = System.getProperty("user.dir") + "/Databases/payment.db";
+            String url = "jdbc:sqlite:" + dbPath;
+
+            // Establish the connection
+            conn = DriverManager.getConnection(url);
+        } catch (ClassNotFoundException e) {
+            System.err.println("SQLite driver not found: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error connecting to database: " + e.getMessage());
+        }
+        return conn;
+	}
 }

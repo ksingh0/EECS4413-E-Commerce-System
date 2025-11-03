@@ -16,7 +16,7 @@ public class PaymentDAO {
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
-        try (Connection conn = DatabaseConnection.connect();
+        try (Connection conn = DatabaseConnection.connectPayment();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, payment.getUserId());
@@ -47,7 +47,7 @@ public class PaymentDAO {
         List<Payment> payments = new ArrayList<>();
         String sql = "SELECT * FROM payments";
 
-        try (Connection conn = DatabaseConnection.connect();
+        try (Connection conn = DatabaseConnection.connectPayment();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -67,7 +67,7 @@ public class PaymentDAO {
         String sql = "SELECT * FROM payments WHERE payment_id = ?";
         Payment payment = null;
 
-        try (Connection conn = DatabaseConnection.connect();
+        try (Connection conn = DatabaseConnection.connectPayment();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, paymentId);
@@ -88,7 +88,7 @@ public class PaymentDAO {
     public void updatePaymentStatus(int paymentId, String status) {
         String sql = "UPDATE payments SET status = ? WHERE payment_id = ?";
 
-        try (Connection conn = DatabaseConnection.connect();
+        try (Connection conn = DatabaseConnection.connectPayment();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, status);

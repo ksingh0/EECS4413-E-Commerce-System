@@ -23,6 +23,10 @@ public class Payment {
 	private String cardType;
 	private String expiryDate; 
 
+	public Payment() {
+		// Empty constructor required for Jersey
+	}
+	
 	public Payment(
 			int paymentId,
 			int userId,
