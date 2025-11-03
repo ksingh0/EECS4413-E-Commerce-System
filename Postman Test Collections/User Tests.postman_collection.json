@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "9719fdae-0850-4154-9882-fa64c0fbd16a",
+		"name": "User Tests",
+		"description": "Tests for UserController endpoints including signup & signin. Host defaults to localhost:8080.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49744176",
+		"_collection_link": "https://ksingh0-e2b719e4-6265254.postman.co/workspace/4413~866d8843-c780-45a0-9cfa-c3d6bcb557ef/collection/49744176-9719fdae-0850-4154-9882-fa64c0fbd16a?action=share&source=collection_link&creator=49744176"
+	},
+	"item": [
+		{
+			"name": "Sign-Up - Valid",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"alice3\",\"password\":\"secret123\",\"firstName\":\"Alice\",\"lastName\":\"Smith\",\"streetName\":\"King Street\",\"streetNumber\":\"42\",\"city\":\"Toronto\",\"country\":\"Canada\",\"postalCode\":\"M4B1B3\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/users/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-Up - Missing Fields (Bad Request)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"bob\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/users/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-In - Valid",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"alice\",\"password\":\"secret123\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/users/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"users",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-In - Wrong Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"alice\",\"password\":\"wrongpassword\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/users/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"users",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"alice\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/users/forgot-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"users",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
