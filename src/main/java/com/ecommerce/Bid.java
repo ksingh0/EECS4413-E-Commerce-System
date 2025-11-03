@@ -1,57 +1,78 @@
 package com.ecommerce;
 
+/**
+ * Bid model class - Transfer Object
+ */
+
 public class Bid {
+	private int bidID;
+	private int auctionID;
+	private int userID; //String or int? 
+	private long bidTime;
+	private double amount;
 	
-	private int bidID, auctionID, userID, bidTime, bidAmount;
-
-	public Bid(int bidID, int auctionID, int userID, int bidTime, int bidAmount) {
-		super();
-		this.bidID = bidID;
-		this.auctionID = auctionID;
-		this.userID = userID;
-		this.bidTime = bidTime;
-		this.bidAmount = bidAmount;
+	
+	public Bid() {
+		
 	}
-
-	public int getBidID() {
-		return bidID;
+	
+	//verify
+	public int verifyBid(Auction auction) {
+		if (this.getAmount() <= auction.getHighestPrice()) {
+			return 1;
+//			throw new IllegalArgumentException("Bid amount must be greater than the current highest bid!");
+		}
+		if (auction.isEnded()) {
+			return 2;
+//			throw new RuntimeException("This auction has ended; bids are no longer accepted.");
+		}
+		
+		return 0;
+		
 	}
-
+	
+	//setters
 	public void setBidID(int bidID) {
 		this.bidID = bidID;
 	}
-
-	public int getAuctionID() {
-		return auctionID;
-	}
-
+	
 	public void setAuctionID(int auctionID) {
 		this.auctionID = auctionID;
 	}
-
-	public int getUserID() {
-		return userID;
-	}
-
+	
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
-
-	public int getBidTime() {
-		return bidTime;
-	}
-
-	public void setBidTime(int bidTime) {
+	
+	public void setBidTime(long bidTime) {
 		this.bidTime = bidTime;
 	}
-
-	public int getBidAmount() {
-		return bidAmount;
-	}
-
-	public void setBidAmount(int bidAmount) {
-		this.bidAmount = bidAmount;
+	
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 	
+	
+	//getters
+	public int getBidID() {
+		return this.bidID;
+	}
+	
+	public int getAuctionID() {
+		return this.auctionID;
+	}
+	
+	public int getUserID() {
+		return this.userID;
+	}
+	
+	public long getBidTime() {
+		return this.bidTime;
+	}
+	
+	public double getAmount() {
+		return this.amount;
+	}
 	
 }
+
