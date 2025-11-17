@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<header>
+    <h1>Payment Page</h1>
+</header>
+
+<div class="container">
+
+    <h2>Order Summary</h2>
+    <p id="orderInfo"></p>
+
+    <h2>Billing Information</h2>
+    <form id="paymentForm">
+
+        <label for="billingName">Full Name:</label>
+        <input type="text" id="billingName" required><br>
+
+        <label for="billingAddress">Address:</label>
+        <input type="text" id="billingAddress" required><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" required><br>
+
+        <label for="state">State/Province:</label>
+        <input type="text" id="state" required><br>
+
+        <label for="postalCode">Postal Code:</label>
+        <input type="text" id="postalCode" required><br>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" required><br>
+
+        <h2>Card Information</h2>
+
+        <label for="cardHolderName">Name on Card:</label>
+        <input type="text" id="cardHolderName" required><br>
+
+        <label for="cardNumber">Card Number:</label>
+        <input type="text" id="cardNumber" required><br>
+
+        <label for="cardType">Card Type:</label>
+        <select id="cardType" required>
+            <option value="">Select</option>
+            <option value="VISA">VISA</option>
+            <option value="MASTERCARD">MasterCard</option>
+            <option value="AMEX">AMEX</option>
+        </select><br>
+
+        <label for="expiryDate">Expiry Date (MM/YY):</label>
+        <input type="text" id="expiryDate" required><br>
+
+        <button type="submit">Submit Payment</button>
+    </form>
+
+    <p id="paymentMessage"></p>
+
+</div>
+
+<footer>
+    <p>© 2025 eCommerce Auction Platform</p>
+</footer>
+
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const userId = params.get("userId");
+const auctionId = params.get("auctionId");
+
+let calculatedAmount = 0;
+
+// Load user billing address + item info
+$(document).ready(function() {
+
+    // Load user info
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/users/" + userId,
+        type: "GET",
+        success: function(user){
+            $("#billingName").val(user.fullName);
+            $("#billingAddress").val(user.address);
+            $("#city").val(user.city);
+            $("#state").val(user.state);
+            $("#postalCode").val(user.postalCode);
+            $("#country").val(user.country);
+        }
+    });
+
+    // Load auction info
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/auctions/" + auctionId,
+        type: "GET",
+        success: function(auction){
+
+            calculatedAmount = auction.winningBid + auction.shippingCost;
+
+            $("#orderInfo").html(
+                "Item: " + auction.itemName + "<br>" +
+                "Winning Bid: $" + auction.winningBid + "<br>" +
+                "Shipping: $" + auction.shippingCost + "<br>" +
+                "<strong>Total Amount: $" + calculatedAmount + "</strong>"
+            );
+        }
+    });
+});
+
+
+// Submit payment
+$("#paymentForm").submit(function(e){
+    e.preventDefault();
+
+    const paymentData = {
+        userId: userId,
+        auctionId: auctionId,
+        amount: calculatedAmount,
+
+        billingName: $("#billingName").val(),
+        billingAddress: $("#billingAddress").val(),
+        city: $("#city").val(),
+        state: $("#state").val(),
+        postalCode: $("#postalCode").val(),
+        country: $("#country").val(),
+
+        cardHolderName: $("#cardHolderName").val(),
+        cardNumber: $("#cardNumber").val(),
+        cardType: $("#cardType").val(),
+        expiryDate: $("#expiryDate").val()
+    };
+
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/payments",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(paymentData),
+        success: function(result){
+            window.location.href = "Receipt.html?paymentId=" + result.paymentId;
+        },
+        error: function(err){
+            console.log(err);
+            $("#paymentMessage").text("Payment failed.");
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
