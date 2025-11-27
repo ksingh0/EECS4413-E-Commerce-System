@@ -7,7 +7,7 @@ import java.util.List;
 public class PaymentDAO {
 
     // Insert a new payment record
-    public void createPayment(Payment payment) {
+    public int createPayment(Payment payment) {
         String sql = """
             INSERT INTO payments (
                 user_id, auction_id, amount, payment_time, status,
@@ -15,7 +15,8 @@ public class PaymentDAO {
                 card_holder_name, card_number, card_type, expiry_date
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
-
+        int generatedId = -1;
+        
         try (Connection conn = DatabaseConnection.connectPayment();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -37,9 +38,16 @@ public class PaymentDAO {
 
             pstmt.executeUpdate();
 
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             System.err.println("Error creating payment: " + e.getMessage());
         }
+
+        return generatedId;
     }
 
     // Retrieve all payments
