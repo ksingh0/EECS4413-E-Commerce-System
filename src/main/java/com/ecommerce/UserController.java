@@ -1,5 +1,8 @@
 package com.ecommerce;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 import jakarta.ws.rs.core.Response;
@@ -8,10 +11,14 @@ import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.math.BigInteger;
 
+
+
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
+	@Context
+	private HttpServletRequest request;
 
     private final UserDAO userDAO = new UserDAO();
 
@@ -75,6 +82,12 @@ public class UserController {
         }
 
         user.setPassword(null);
+        
+        //Store user into session (necessary for wishlist implementation)
+        HttpSession session = request.getSession(true);
+        session.setAttribute("userId", user.getId());
+        session.setAttribute("username", user.getUsername());
+        
         return Response.ok(user).build();
     }
 
@@ -161,5 +174,16 @@ public class UserController {
         
         userDAO.delete(id);
         return Response.noContent().build();
+    }
+    
+    @POST
+    @Path("/logout")
+    public Response logout() {
+    	// Remove the stored session variables
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return Response.ok("{\"success\":true}").build();
     }
 }
