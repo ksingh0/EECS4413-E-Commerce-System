@@ -42,12 +42,16 @@ $(document).ready(function() {
         type: "GET",
         success: function(payment){
 
+            // Read expedited flag
+            const expeditedUsed = payment.expeditedShipping ? "Yes" : "No";
+
             // Display payment info
             $("#receiptInfo").html(
                 "<strong>Payment ID:</strong> " + payment.paymentId + "<br>" +
                 "<strong>Amount Paid:</strong> $" + payment.amount + "<br>" +
                 "<strong>Status:</strong> " + payment.status + "<br>" +
-                "<strong>Payment Time:</strong> " + payment.paymentTime + "<br>"
+                "<strong>Payment Time:</strong> " + payment.paymentTime + "<br>" +
+                "<strong>Expedited Shipping:</strong> " + expeditedUsed + "<br>"
             );
 
             // Step 2: Fetch auction details for shipping info

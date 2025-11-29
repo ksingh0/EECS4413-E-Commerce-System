@@ -48,9 +48,17 @@
 </footer>
 
 <script>
+// Read normal parameters
 const params = new URLSearchParams(window.location.search);
 const userId = params.get("userId");
 const auctionId = params.get("auctionId");
+
+// Read expeditedShipping flag
+const expeditedShipping = params.get("expeditedShipping") === "true";
+
+// Constant fee (adjust if needed)
+const EXPEDITED_FEE = 15;
+
 let calculatedAmount = 0;
 
 $(document).ready(function() {
@@ -74,11 +82,23 @@ $(document).ready(function() {
         url: "http://localhost:8080/EECS4413-E-Commerce-System/api/auctions?id=" + auctionId,
         type: "GET",
         success: function(auction){
-            calculatedAmount = auction.winningBid + auction.shippingCost;
+
+            // Add expedited shipping cost
+            let expeditedCost = expeditedShipping ? EXPEDITED_FEE : 0;
+
+            calculatedAmount = auction.winningBid + auction.shippingCost + expeditedCost;
+
             $("#orderInfo").html(
                 "Item: " + auction.itemName + "<br>" +
                 "Winning Bid: $" + auction.winningBid + "<br>" +
                 "Shipping: $" + auction.shippingCost + "<br>" +
+
+                // Show fee only if selected
+                (expeditedShipping 
+                    ? "Expedited Shipping: +$" + expeditedCost + "<br>"
+                    : ""
+                ) +
+
                 "<strong>Total Amount: $" + calculatedAmount + "</strong>"
             );
         }
@@ -87,22 +107,31 @@ $(document).ready(function() {
 
 $("#paymentForm").submit(function(e){
     e.preventDefault();
+
     const paymentData = {
         userId: userId,
         auctionId: auctionId,
         amount: calculatedAmount,
+
+        // Billing fields
         billingName: $("#billingName").val(),
         billingAddress: $("#billingAddress").val(),
         city: $("#city").val(),
         state: $("#state").val(),
         postalCode: $("#postalCode").val(),
         country: $("#country").val(),
+
+        // Card data
         cardHolderName: $("#cardHolderName").val(),
         cardNumber: $("#cardNumber").val(),
         cardType: $("#cardType").val(),
         expiryDate: $("#expiryDate").val(),
+
         paymentTime: new Date().toISOString(),
-        status: "PENDING"
+        status: "PENDING",
+
+        // Store expedited selection in backend record
+        expeditedShipping: expeditedShipping
     };
 
     $.ajax({
@@ -111,7 +140,6 @@ $("#paymentForm").submit(function(e){
         contentType: "application/json",
         data: JSON.stringify(paymentData),
         success: function(result){
-            // Use the returned paymentId to redirect
             if (result.paymentId) {
                 window.location.href = "Receipt.html?paymentId=" + result.paymentId;
             } else {
