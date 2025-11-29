@@ -2,4 +2,18 @@
 <Context privileged="true" reloadable="true">
 <WatchedResource>WEB-INF/web.xml</WatchedResource>
 <Manager pathname="" />
+<Resource name="jdbc/auction" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+type="javax.sql.DataSource" driverClassName="org.sqlite.JDBC"
+url="jdbc:sqlite:/Users/cedar/Desktop/AuctionDB.db"/>
+<Resource name="jdbc/catalogue" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+type="javax.sql.DataSource" driverClassName="org.sqlite.JDBC"
+url="jdbc:sqlite:/Users/cedar/Desktop/catalogue.db"/>
+<Resource name="jdbc/payment" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+type="javax.sql.DataSource" driverClassName="org.sqlite.JDBC"
+url="jdbc:sqlite::resource:payment.db"/>
+<Resource name="jdbc/users" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+type="javax.sql.DataSource" driverClassName="org.sqlite.JDBC"
+url="jdbc:sqlite::resource:Users.db"/>
+
+
 </Context>

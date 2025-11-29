@@ -4,6 +4,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
+	
+	<listener>
+    <listener-class>com.ecommerce.AuctionManager</listener-class>
+  </listener>
+	
 	<!-- Jersey Servlet configurations -->
 	<servlet>
 		<servlet-name>Jersey REST Service</servlet-name>
@@ -16,6 +21,37 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Jersey REST Service</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+        <servlet-name>Auction Page</servlet-name>
+        <jsp-file>/Auction.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Auction Page</servlet-name>
+		<url-pattern>/auction</url-pattern>
+	</servlet-mapping>
+		
+	
+	<servlet>
+        <servlet-name>Create Auction</servlet-name>
+        <jsp-file>/CreateAuction.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Create Auction</servlet-name>
+		<url-pattern>/create-auction</url-pattern>
+	</servlet-mapping>
+
+<!--  
+	<servlet>
+        <servlet-name>404</servlet-name>
+        <jsp-file>/404NotFound.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>404</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>	
+-->
+	
 </web-app>
