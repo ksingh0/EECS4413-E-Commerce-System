@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>View Auction</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<header><h1>Auction</h1> </header>
+	<div class="container">
+	<table id ="auctionTable" border="1">
+		<tr>
+			<th>Item Name</th>
+			<th>Item Description</th>
+			<th>Highest Bid</th>
+			<th>Highest Bidder</th>
+		</tr>
+	</table>
+</div>
+<br>
+	
+<script>
+$(document).ready(function() {
+	var auctionId = $("#id").val();
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/items",
+		type: 'GET',
+		success: function(result) {
+			var table = $("#auctionTable");
+			result.forEach(function(item) {
+				var row = $(`<tr id = ${item.item_id}></tr>`);
+				row.append($("<td></td>").text(item.item_name));
+				row.append($("<td></td>").text(item.item_description));
+				row.append($("<td></td>").text(item.current_bid));
+				row.append($("<td></td>").text(item.end_date));
+				table.append(row);
+			});
+		}, 
+		error: function(error) { console.log(error); }
+	});
+});
+</script>
+
+</body>
+</html>
