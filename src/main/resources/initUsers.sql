@@ -6,6 +6,7 @@ CREATE TABLE users (
   last_name VARCHAR(50) NOT NULL,
   street_name VARCHAR(255) NOT NULL,
   street_number VARCHAR(10) NOT NULL,
+  state VARCHAR(50)NOT NULL,
   city VARCHAR(50) NOT NULL,
   country VARCHAR(50) NOT NULL,
   postal_code VARCHAR(10) NOT NULL,

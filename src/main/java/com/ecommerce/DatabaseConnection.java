@@ -1,5 +1,8 @@
 package com.ecommerce;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,20 +14,28 @@ import javax.sql.DataSource;
 public class DatabaseConnection {
 	public static Connection connectAuction() {
 		Connection conn = null;
+		
         try {
         	
             Class.forName("org.sqlite.JDBC");
+            /*
             //Get the path of the database relative to the project
             String dbPath = System.getProperty("user.dir") + "/Databases/AuctionDB.db";
             String url = "jdbc:sqlite:" + dbPath;
 
             // Establish the connection
             conn = DriverManager.getConnection(url);
-        } catch (ClassNotFoundException e) {
-            System.err.println("SQLite driver not found: " + e.getMessage());
+            */
+    		URL resource = DatabaseConnection.class.getClassLoader().getResource("/AuctionDB.db");
+    		File dbFile = new File(resource.toURI());
+    		conn = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbFile.getAbsolutePath()));
         } catch (SQLException e) {
             System.err.println("Error connecting to database: " + e.getMessage());
-        }
+        } catch (URISyntaxException e) {
+        	System.err.println("Error getting URI" + e.getMessage());        
+        } catch (ClassNotFoundException e) {
+        	System.err.println("SQLite driver not found:" + e.getMessage());      
+		}
         return conn;
 	}
 	
@@ -33,16 +44,22 @@ public class DatabaseConnection {
         try {
         	
             Class.forName("org.sqlite.JDBC");
+            /*
             //Get the path of the database relative to the project
             String dbPath = System.getProperty("user.dir") + "/Databases/Users.db";
             String url = "jdbc:sqlite:" + dbPath;
 
             // Establish the connection
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(url);*/
+            URL resource = DatabaseConnection.class.getClassLoader().getResource("/Users.db");
+    		File dbFile = new File(resource.toURI());
+    		conn = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbFile.getAbsolutePath()));
         } catch (ClassNotFoundException e) {
             System.err.println("SQLite driver not found: " + e.getMessage());
         } catch (SQLException e) {
             System.err.println("Error connecting to database: " + e.getMessage());
+        } catch (URISyntaxException e) {
+        	System.err.println("Error getting URI" + e.getMessage());
         }
         return conn;
 	}
@@ -51,34 +68,47 @@ public class DatabaseConnection {
 		Connection conn = null;
         try {
             Class.forName("org.sqlite.JDBC");
+            /*
             //Get the path of the database relative to the project
             String dbPath = System.getProperty("user.dir") + "/Databases/payment.db";
             String url = "jdbc:sqlite:" + dbPath;
 
             // Establish the connection
             conn = DriverManager.getConnection(url);
+            */
+            
+            URL resource = DatabaseConnection.class.getClassLoader().getResource("/payment.db");
+    		File dbFile = new File(resource.toURI());
+    		conn = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbFile.getAbsolutePath()));
         } catch (ClassNotFoundException e) {
             System.err.println("SQLite driver not found: " + e.getMessage());
         } catch (SQLException e) {
             System.err.println("Error connecting to database: " + e.getMessage());
+        } catch (URISyntaxException e) {
+        	System.err.println("Error getting URI" + e.getMessage());
         }
         return conn;
 	}
-	
 	public static Connection connectCatalogue() {
 		Connection conn = null;
         try {
             Class.forName("org.sqlite.JDBC");
+            /*
             //Get the path of the database relative to the project
             String dbPath = System.getProperty("user.dir") + "/Databases/catalogue.db";
             String url = "jdbc:sqlite:" + dbPath;
 
             // Establish the connection
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(url); */
+            URL resource = DatabaseConnection.class.getClassLoader().getResource("/catalogue.db");
+    		File dbFile = new File(resource.toURI());
+    		conn = DriverManager.getConnection(String.format("jdbc:sqlite:%s", dbFile.getAbsolutePath()));
         } catch (ClassNotFoundException e) {
             System.err.println("SQLite driver not found: " + e.getMessage());
         } catch (SQLException e) {
             System.err.println("Error connecting to database: " + e.getMessage());
+        } catch (URISyntaxException e) {
+        	System.err.println("Error getting URI" + e.getMessage());
         }
         return conn;
 	}

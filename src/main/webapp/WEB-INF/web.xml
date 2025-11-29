@@ -5,17 +5,39 @@
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<!-- Jersey Servlet configurations -->
-	<servlet>
-		<servlet-name>Jersey REST Service</servlet-name>
-		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>com.ecommerce</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Jersey REST Service</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
+	<display-name>E-Commerce Auction System</display-name>
+
+    <!-- Default homepage -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- REST Controller -->
+    <servlet>
+        <servlet-name>Jersey REST</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jakarta.ws.rs.Application</param-name>
+            <param-value>com.ecommerce.JerseyConfig</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Jersey REST</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!--  SESSION PROTECTION FILTER  -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.ecommerce.AuthFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/*</url-pattern> 
+    </filter-mapping>
+
 </web-app>

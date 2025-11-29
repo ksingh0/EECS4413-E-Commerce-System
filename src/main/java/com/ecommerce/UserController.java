@@ -1,6 +1,9 @@
 package com.ecommerce;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+
+import java.util.HashMap;
 import java.util.List;
 import jakarta.ws.rs.core.Response;
 import java.util.Map;
@@ -11,6 +14,7 @@ import java.math.BigInteger;
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+
 public class UserController {
 
     private final UserDAO userDAO = new UserDAO();
@@ -38,7 +42,7 @@ public class UserController {
         if (user.getUsername() == null || user.getPassword() == null ||
             user.getFirstName() == null || user.getLastName() == null ||
             user.getStreetName() == null || user.getStreetNumber() == null ||
-            user.getCity() == null || user.getCountry() == null ||
+            user.getCity() == null || user.getState()==null || user.getCountry() == null ||
             user.getPostalCode() == null) {
             return Response.status(400).entity(Map.of("error", "All fields required")).build();
 //        	return Response.status(400).entity(user.toString()).build();
@@ -61,7 +65,9 @@ public class UserController {
 
     @POST
     @Path("/signin")
-    public Response signin(Map<String, String> creds) {
+    public Response signin(@Context jakarta.servlet.http.HttpServletRequest request,
+                        Map<String, String> creds) {
+
         String username = creds.get("username");
         String password = creds.get("password");
 
@@ -74,9 +80,30 @@ public class UserController {
             return Response.status(401).entity(Map.of("error", "Invalid credentials")).build();
         }
 
+        //  Create session
+        jakarta.servlet.http.HttpSession session = request.getSession(true);
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("userId", user.getId());
+        session.setMaxInactiveInterval(60 * 30); // expires 30 min
+
         user.setPassword(null);
-        return Response.ok(user).build();
+
+        return Response.ok(Map.of(
+            "message", "Logged in successfully",
+            "user", user,
+            "sessionId", session.getId() // optional to send back
+        )).build();
     }
+
+    @POST
+    @Path("/logout")
+    public Response logout(@Context jakarta.servlet.http.HttpServletRequest request) {
+        request.getSession().invalidate();
+        return Response.ok(Map.of("message","Logged out")).build();
+    }
+
+    
+    private static final Map<String, String> resetTokens = new HashMap<>();
 
     @POST
     @Path("/forgot-password")
@@ -85,8 +112,17 @@ public class UserController {
         if (username == null || !userDAO.existsByUsername(username)) {
             return Response.status(404).entity(Map.of("error", "User not found")).build();
         }
-        // In real app: send email
-        return Response.ok(Map.of("message", "Password reset link sent to email")).build();
+
+        // Generate reset token
+        String token = java.util.UUID.randomUUID().toString();
+        resetTokens.put(token, username);
+
+        String resetUrl = "http://localhost:8080/EECS4413-E-Commerce-System/reset-password.html?token=" + token;
+
+        return Response.ok(Map.of(
+            "message", "Password reset link generated.",
+            "reset_link", resetUrl      // Simulated as email
+        )).build();
     }
 
     @GET
@@ -96,7 +132,29 @@ public class UserController {
         return Response.ok(users).build();
     }
 
-    // Admin-only endpoint, in real app would check admin role
+    @POST
+    @Path("/reset-password")
+    public Response resetPassword(Map<String, String> body) {
+        String token = body.get("token");
+        String newPassword = body.get("password");
+
+        if (token == null || newPassword == null || !resetTokens.containsKey(token)) {
+            return Response.status(400).entity(Map.of("error", "Invalid or expired token")).build();
+        }
+
+        String username = resetTokens.get(token);
+        User user = userDAO.findByUsername(username);
+        if (user == null) {
+            return Response.status(404).entity(Map.of("error", "User not found")).build();
+        }
+
+        user.setPassword(hashPassword(newPassword));
+        userDAO.update(user.getId(), user);
+        resetTokens.remove(token);
+
+        return Response.ok(Map.of("message", "Password updated successfully")).build();
+    }
+
     @POST
     @Path("/create")
     public Response createUser(User user) {
@@ -133,21 +191,22 @@ public class UserController {
         if (existing == null) {
             return Response.status(404).entity(Map.of("error", "User not found")).build();
         }
-        
-        // In real app: verify user has permission to update this ID
-        
-        // Don't allow username changes
+
         updates.setUsername(existing.getUsername());
-        
-        // If updating password, hash it
+        updates.setSeller(existing.isSeller());
+
         if (updates.getPassword() != null) {
             updates.setPassword(hashPassword(updates.getPassword()));
+        } else {
+            updates.setPassword(existing.getPassword());
         }
-        
+
         User updated = userDAO.update(id, updates);
         updated.setPassword(null);
+
         return Response.ok(updated).build();
     }
+
 
     @DELETE
     @Path("/{id}")
