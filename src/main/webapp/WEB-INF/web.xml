@@ -18,4 +18,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CataloguePage</servlet-name>
+		<jsp-file>/catalogue.html</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CataloguePage</servlet-name>
+		<url-pattern>/catalogue</url-pattern>
+	</servlet-mapping>
+
+
 </web-app>

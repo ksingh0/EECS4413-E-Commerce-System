@@ -12,10 +12,16 @@ public class CatalogueController {
 	
 	CatalogueDAO catalogueDAO = new CatalogueDAO();
 	
+	//Server side filtering on items. Filter items using Keyword Users input.
+	//Default have all list of items displayed
 	@GET
 	@Path("/items")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Catalogue> getAllItems() {
+	public List<Catalogue> getAllItems(@QueryParam("keyword") String keyword) {
+		
+		if(keyword != null && !keyword.trim().isEmpty()) {
+			return catalogueDAO.searchItems(keyword);
+		}
 		return catalogueDAO.readAllItems();
 	}
 	
