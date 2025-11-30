@@ -21,10 +21,16 @@ public class PaymentController {
                         .build();
             }
 
-            paymentDAO.createPayment(payment);
-            return Response.status(Response.Status.CREATED)
-                    .entity("{\"message\": \"Payment created successfully.\"}")
-                    .build();
+            int paymentId = paymentDAO.createPayment(payment);
+            if (paymentId > 0) {
+                return Response.status(Response.Status.CREATED)
+                        .entity("{\"paymentId\": " + paymentId + "}")
+                        .build();
+            } else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity("{\"error\": \"Failed to create payment.\"}")
+                        .build();
+            }
 
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
