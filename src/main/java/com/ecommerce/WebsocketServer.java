@@ -23,19 +23,18 @@ public class WebsocketServer {
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
     private static ConcurrentHashMap<Long, Session> userSessions = new ConcurrentHashMap<Long,Session>();
     		
-    @Context
-    HttpServletRequest request;
-    Long userId;
-    
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session);
-        
-        //how to get userId from here ???
+    	
+    	String query = session.getQueryString();
+    	Long userId = Long.parseLong(query.replace("userId=", ""));
+    	
         userSessions.put(userId, session);
         session.getUserProperties().put("userId", userId);
+        session.setMaxIdleTimeout(60*30*1000); // prevent session timeout
         
-        System.out.println("New bidder connected: " + session.getId() + "Userid: " + userId);
+        sessions.add(session);
+        System.out.println("New bidder connected: " + session.getId() + " Userid: " + userId);
     }
 
     @OnClose
@@ -51,39 +50,28 @@ public class WebsocketServer {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public static void onMessage(String message, Session session) {
         // Handle incoming bid messages and then broadcast the update
-        for (Session s : sessions) {
-	        if (!s.equals(session)) { //don't send update to the session the message is coming from
-	            try {
-	                s.getBasicRemote().sendText(message);
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        } 
-       };
+        System.out.println("broadcasttext: " + message);
+                try {
+                	session.getBasicRemote().sendText(message);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            
     }
     
     public static void auctionEndedNotification(Long userId, String message) {
     	System.out.println("auctionEndedNotification triggered");
     	
     	for (Session s : sessions) {
-    		try {
-				s.getBasicRemote().sendText(message);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		
     		//check sessions for associated userId and send notifs to only those that match
     		if ( (Long) s.getUserProperties().get("userId") == userId) {
-    			try {
-    				s.getBasicRemote().sendText(message);
-    			} catch (Exception e) {
-    				System.err.println("Error sending auction end notif to user" + userId);
-    			}
-    		} else {
-    			System.out.println("Session not found");
+    			onMessage(message, s);
+    		} 
+    		else {
+    			System.out.println("User doesn't match");
     		}
     	}
     }

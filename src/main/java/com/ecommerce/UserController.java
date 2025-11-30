@@ -1,4 +1,5 @@
 package com.ecommerce;
+import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -91,9 +92,19 @@ public class UserController {
         return Response.ok(Map.of(
             "message", "Logged in successfully",
             "user", user,
-            "sessionId", session.getId() // optional to send back
+            "sessionId", session.getId(),
+            "userId", user.getId()// optional to send back
         )).build();
     }
+    
+    /*
+    @GET
+    @Path("/getId")
+    public long getUserId(@Context jakarta.servlet.http.HttpServletRequest request) {
+    	HttpSession session = request.getSession(false);
+    	return (Long) session.getAttribute("userId");
+    }
+    */
 
     @POST
     @Path("/logout")
@@ -131,6 +142,7 @@ public class UserController {
         users.forEach(u -> u.setPassword(null)); // Don't expose password hashes
         return Response.ok(users).build();
     }
+
 
     @POST
     @Path("/reset-password")

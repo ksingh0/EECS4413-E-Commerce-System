@@ -75,7 +75,7 @@ public class AuctionController {
 		auctionDAO.updateAuctionProcess(AuctionID, auction);
 	}
 	
-	//delete auction - e.g. if cancelled by seller ?
+	//delete auction
 	@DELETE
 	@Path("/{AuctionID}")
 	@Produces(MediaType.APPLICATION_JSON) 

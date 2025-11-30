@@ -57,9 +57,10 @@
 var winnerId;
 var ended;
 var highestPrice;
-var userId;
+var userId = sessionStorage.getItem("userId");
 var shippingCost;
 var expeditedShipping;
+
 console.log(userId);
 
 //get parameters - eg linked from another page (e.g. from search/UC2)\
@@ -86,18 +87,6 @@ function getHighestBidder(highestBidId, isEnded) {
 
 // run after page load
 $(document).ready(function() {
-	// get user ID with ajax request
-	$.ajax({
-		url: "http://localhost:8080/ecommerce-auction-system/api/wishlist", 
-		type: 'GET',
-		success: function(result) {
-			userId = result;
-		}, 
-		error: function(error) { 
-			console.log("Error getting user id");
-			userId = null; }
-	});
-	
 	// STEP 1: Get info from catalogue about item.
 	$.ajax({
 		url: "http://localhost:8080/ecommerce-auction-system/api/item/" + itemID,
@@ -194,7 +183,7 @@ function auctionEnded(auctionId) {
 			var highestPrice = $("#highestPrice");
 			
 			//display id of highest bidder
-			if (auction.highestBidID ) {
+			if (auction.highestBidID) {
 				highestPrice.html("<b>Winning Bid: </b>" + auction.highestPrice);
 				getHighestBidder(auction.highestBidID, true);
 			} else { 
@@ -211,20 +200,19 @@ function auctionEnded(auctionId) {
 	});
 }
 
-function auctionOngoing(auctionId) {
-}
-
 //form to submit bids
 $("#bidForm").submit(function(e) {
 	e.preventDefault();
 	var bidData = {
 		auctionID: auctionId,
-		userID: 9, //get user id from session
+		userID: userId, //get user id from session
 		amount: $("#bidAmount").val()
 	};
 	
-	console.log(bidData); //debug
-	
+	if (!userId) {
+		alert("You must be signed in to bid!");
+		return;
+	}
 	$.ajax({
 		url: "http://localhost:8080/ecommerce-auction-system/api/bid",
 		type: 'POST',
@@ -232,10 +220,10 @@ $("#bidForm").submit(function(e) {
 		data: JSON.stringify(bidData),
 		success: function(result) {
 			$("#bidMessage").text("Bid placed.");
-			$('#auctionMessage').css('color', 'black');
+			$("#bidMessage").css('color', 'black');
 			$("#highestPrice").html("<b>Current Highest Bid: </b>" + bidData.amount); //update with new highest bid + bidderID
 			$("#highestBidderId").html("<b>Highest Bidder ID: </b>" + bidData.userID);
-			bidPlaced(auctionId);
+			//bidPlaced(auctionId);
 		},
         error: function(jqXHR, textStatus, errorThrown) {
         	$("#bidMessage").text(jqXHR.responseText); //give more descriptive error msg. and maybe condition checking.

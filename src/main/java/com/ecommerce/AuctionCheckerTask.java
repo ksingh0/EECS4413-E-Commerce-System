@@ -24,7 +24,6 @@ public class AuctionCheckerTask implements Runnable {
 		//get all auctions
 		List<Auction> auctions = auctionController.getAllAuctions(); //could be a direct call to DAO instead ?
 		
-		
 		for (Auction a : auctions) {
 			if (a.isEnded() && a.getProcessed() != 1) { //check if auction has ended but is not yet processed
 				int id = a.getId();
