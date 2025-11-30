@@ -55,6 +55,7 @@ const auctionId = params.get("auctionId");
 
 // Read expeditedShipping flag
 const expeditedShipping = params.get("expeditedShipping") === "true";
+console.log(auctionId, expeditedShipping);
 
 // Constant fee (adjust if needed)
 const EXPEDITED_FEE = 15;
@@ -65,7 +66,7 @@ $(document).ready(function() {
 
     // Load user info
     $.ajax({
-        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/users?id=" + userId,
+        url: "http://localhost:8080/ecommerce-auction-system/api/users?id=" + userId,
         type: "GET",
         success: function(user){
             $("#billingName").val(user.fullName);
@@ -79,17 +80,42 @@ $(document).ready(function() {
 
     // Load auction info
     $.ajax({
-        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/auctions?id=" + auctionId,
+        url: "http://localhost:8080/ecommerce-auction-system/api/auctions?id=" + auctionId,
         type: "GET",
         success: function(auction){
-
             // Add expedited shipping cost
             let expeditedCost = expeditedShipping ? EXPEDITED_FEE : 0;
 
-            calculatedAmount = auction.winningBid + auction.shippingCost + expeditedCost;
+            calculatedAmount += auction.winningBid;
 
             $("#orderInfo").html(
                 "Item: " + auction.itemName + "<br>" +
+                "Winning Bid: $" + auction.winningBid + "<br>" +
+                "Shipping: $" + auction.shippingCost + "<br>" +
+
+                // Show fee only if selected
+                (expeditedShipping 
+                    ? "Expedited Shipping: +$" + expeditedCost + "<br>"
+                    : ""
+                ) +
+
+                "<strong>Total Amount: $" + calculatedAmount + "</strong>"
+            );
+        }
+    });
+    
+    // getitem info
+    $.ajax({
+        url: "http://localhost:8080/ecommerce-auction-system/api/item?id=" + auctionId,
+        type: "GET",
+        success: function(item){
+            // Add expedited shipping cost
+            let expeditedCost = expeditedShipping ? EXPEDITED_FEE : 0;
+
+            calculatedAmount += item.shippingCost + expeditedCost;
+
+            $("#orderInfo").html(
+                "Item: " + item.item_name + "<br>" +
                 "Winning Bid: $" + auction.winningBid + "<br>" +
                 "Shipping: $" + auction.shippingCost + "<br>" +
 
@@ -135,7 +161,7 @@ $("#paymentForm").submit(function(e){
     };
 
     $.ajax({
-        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/payment",
+        url: "http://localhost:8080/ecommerce-auction-system/api/payment",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(paymentData),

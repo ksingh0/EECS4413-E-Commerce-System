@@ -153,16 +153,15 @@ function checkEnded(auctionId) {
 
 // triggered after clicking "Pay Now" button
 function payNow() {
-	
 	var expeditedShippingCheck = document.getElementById("expeditedOption").checked; //true or false
-
+	
 	//check if user attempting to pay is the winner
-	if (userId === winnerId) {
+	if (userId == winnerId) {
 		
 		//if winner: redirect to payment page
 		window.location.href = "http://localhost:8080/ecommerce-auction-system/payment?auctionId=" + itemID 
-				+ "?userId=" + userId
-			 	+ "?expeditedShipping=" + expeditedShippingCheck; //**TODO: CHANGE THIS TO PAYMENT PAGE**
+				+ "&userId=" + userId
+			 	+ "&expeditedShipping=" + expeditedShippingCheck; //**TODO: CHANGE THIS TO PAYMENT PAGE**
 	} else {
 		// if not winner: receive failure notice
 		alert("Error - You did not win this auction.");
@@ -221,7 +220,7 @@ $("#bidForm").submit(function(e) {
 		success: function(result) {
 			$("#bidMessage").text("Bid placed.");
 			$("#bidMessage").css('color', 'black');
-			$("#highestPrice").html("<b>Current Highest Bid: </b>" + bidData.amount); //update with new highest bid + bidderID
+			$("#highestPrice").html("<b>Current Highest Bid: </b>$" + bidData.amount); //update with new highest bid + bidderID
 			$("#highestBidderId").html("<b>Highest Bidder ID: </b>" + bidData.userID);
 			//bidPlaced(auctionId);
 		},
