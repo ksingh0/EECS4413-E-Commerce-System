@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Sign In</h1>
+    </header>
+
+    <div class="container">
+        <form id="signinForm">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+
+            <label>Password:</label>
+            <input type="password" id="password" required>
+
+            <input type="submit" value="Sign In">
+        </form>
+        <p id="message" style="color: red; text-align: center;"></p>
+        <p style="text-align: center;">
+            <a href="forgot-password.html">Forgot Password?</a><br><br> Don't have an account? <a href="signup.html">Sign Up</a>
+        </p>
+    </div>
+
+    <footer>
+        <p>eCommerce Auction Platform</p>
+    </footer>
+
+    <script>
+        $("#signinForm").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "http://localhost:8080/EECS4413-E-Commerce-System/api/users/signin",
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                }, // COOKIE SUPPORT
+                contentType: "application/json",
+                data: JSON.stringify({
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                }),
+                success: function(res) {
+                    alert("Login successful");
+                    window.location.href = "dashboard.html";
+                },
+                error: () => alert("Invalid login")
+            });
+        });
+    </script>
+</body>
+
+</html>
