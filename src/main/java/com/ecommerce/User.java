@@ -11,13 +11,14 @@ private String lastName;
 private String streetName;
 private String streetNumber;
 private String city;
+private String state;
 private String postalCode;
 private String country;
 private boolean isSeller;
 
 public User(){}
 public User(Long id, String username, String password, String firstName, String lastName,
-        String streetName, String streetNumber, String city, String postalCode, String country, boolean isSeller) {
+        String streetName, String streetNumber, String city, String state, String postalCode, String country, boolean isSeller) {
     this.id = id;
     this.username = username;
     this.password = password;
@@ -26,6 +27,7 @@ public User(Long id, String username, String password, String firstName, String 
     this.streetName = streetName;
     this.streetNumber = streetNumber;
     this.city = city;
+    this.state=state;
     this.postalCode = postalCode;
     this.country = country;
     this.isSeller = isSeller;
@@ -81,6 +83,12 @@ public String getCity() {
 public void setCity(String city) {
     this.city = city;
 }
+public String getState() {
+    return state;
+}
+public void setState(String state) {
+    this.state =state;
+}
 public String getPostalCode() {
     return postalCode;
 }
@@ -104,7 +112,7 @@ public void setSeller(boolean isSeller) {
 public String toString() {
     return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
             + ", lastName=" + lastName + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", city="
-            + city + ", postalCode=" + postalCode + ", country=" + country + ", isSeller=" + isSeller + "]";
+            + city + "state=" +state + ", postalCode=" + postalCode + ", country=" + country + ", isSeller=" + isSeller + "]";
 }
 }
 

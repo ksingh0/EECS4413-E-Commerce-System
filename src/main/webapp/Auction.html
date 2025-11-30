@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>View Auction</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src = "notification.js"></script>
+</head>
+<body>
+
+<header><h1>Auction</h1> </header>
+<div class = "container">
+	<div class = "column">
+		<div id = "item">
+			<h3 id = "itemName"></h3>
+			<p id ="itemDescription"></p>
+			<p id = "shippingCost"><b>Shipping Cost: </b>$</p>
+			<p id ="startingPrice"><b>Starting Price: </b>$</p>
+		</div>
+	
+		<div id ="auction">
+			<p id = "highestPrice" ><b>Current Highest Bid: </b>$</p>
+			<p id = "highestBidderId"><b>Highest Bidder ID: </b></p>
+			<p id = "endTime"><b>End time: </b></p>
+			<p id ="auctionMessage"></p>
+		</div>
+		
+		<div id ="expeditedShipping" style = "display: none;">
+				<p> Add Expedited Shipping?</p>
+				<p id ="expeditedShippingCost"></p>
+			<form>
+				<label for = "expeditedOption">Yes</label>
+				<input type="radio" id ="expeditedOption" name ="shipping"><br>
+				<label for ="regularOption">No</label>
+				<input type="radio" id ="regularOption" name ="shipping">
+			</form>
+	 	</div>
+	</div>
+	<div class ="column" id = "bid">
+		<form id="bidForm">
+			<label for ="bidAmount"><b>New Bid:</b></label> <br>
+			$ <input id ="bidAmount" type="number" value = "" min="0.00" step="0.01" required>
+			<button>Place Bid</button>
+		</form>
+		<p id="bidMessage"></p>
+		
+		<br>
+		<button>Add to Wishlist</button>
+	</div>
+</div>
+
+<div id = "notification"></div>
+
+<!-------------------------- Javascript Below------------------------------------>
+<script>
+var winnerId;
+var ended;
+var highestPrice;
+var userId = sessionStorage.getItem("userId");
+var shippingCost;
+var expeditedShipping;
+
+console.log(userId);
+
+//get parameters - eg linked from another page (e.g. from search/UC2)\
+let params = new URLSearchParams(window.location.search);
+let itemID = parseInt(params.get("id"));
+let auctionId = itemID;
+
+//get id of the highest bidder
+function getHighestBidder(highestBidId, isEnded) {
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/bid/" + highestBidId,
+		type: 'GET',
+		success: function(bid) {
+			var highestBidderId = $("#highestBidderId");
+			if (!bid) {highestBidderId.html("<b>Highest Bidder ID: </b> n/a")} // if no bids yet
+			else {
+				highestBidderId.html("<b>Highest Bidder ID: </b>" + bid.userID);
+			}
+			if (isEnded) { winnerId = bid.userID; } //assign winner if auction is over
+		}, 
+		error: function(error) {$("#auctionMessage").text("Highest bidder not found.");}
+	});
+}
+
+// run after page load
+$(document).ready(function() {
+	// STEP 1: Get info from catalogue about item.
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/item/" + itemID,
+		type: 'GET',
+		success: function(item) {
+			var itemName = $("#itemName");
+			var itemDesc = $("#itemDescription");
+			itemName.text(item.item_name);
+			itemDesc.text(item.item_description);
+			$("#shippingCost").append(item.shipping_cost);
+			$("#startingPrice").append(item.initial_price);
+			$("#bidAmount").attr("min", item.initial_price);
+			$("#expeditedShippingCost").text(item.expedited_shipping);
+			
+			shippingCost = item.shipping_cost;
+			expeditedShipping = item.expedited_shipping;
+		}, 
+		error: function(error) { 
+			$("#itemDescription").text("Item not found."); 
+			$('#itemDescription').css('color', 'red');
+		}
+	});
+	
+	//get info on auction for this item
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/auctions/" + auctionId,
+		type: 'GET',
+		success: function(auction) {
+			var endTime = $("#endTime");
+			var highestPriceElement = $("#highestPrice");
+			highestPrice = parseFloat(auction.highestPrice);
+			if (auction.highestPrice > 0) {$("#bidAmount").attr("min", auction.highestPrice) }; //if a bid has been made, min is set to the highest bid
+			const dateObject = new Date(parseInt(auction.endTime)*1000);
+			
+			endTime.append(dateObject.toLocaleString()); // epoch -> date string
+			highestPriceElement.append(auction.highestPrice);
+			
+			//display id of highest bidder
+			getHighestBidder(auction.highestBidID, false);
+			//check if ended
+			checkEnded(auctionId);
+		}, 
+		error: function(error) {
+			$("#auctionMessage").text("Auction not found.");
+			$('#auctionMessage').css('color', 'red');}
+	});
+});
+
+//STEP 2: CHECK IF AUCTION ENDED ---------------------------------------
+function checkEnded(auctionId) {
+	$.ajax({
+			url: "http://localhost:8080/ecommerce-auction-system/api/auctions/" + auctionId + "/ended",
+			type: 'GET',
+			success: function(ended) {
+				if (ended) { //auction has ended
+					auctionEnded(auctionId);
+				}
+			},
+			error: function(error) {
+			$("#auctionMessage").text("Auction ended error."); 
+			$('#auctionMessage').css('color', 'red');}
+		});
+}
+
+// triggered after clicking "Pay Now" button
+function payNow() {
+	
+	var expeditedShippingCheck = document.getElementById("expeditedOption").checked; //true or false
+
+	//check if user attempting to pay is the winner
+	if (userId === winnerId) {
+		
+		//if winner: redirect to payment page
+		window.location.href = "http://localhost:8080/ecommerce-auction-system/payment?auctionId=" + itemID 
+				+ "?userId=" + userId
+			 	+ "?expeditedShipping=" + expeditedShippingCheck; //**TODO: CHANGE THIS TO PAYMENT PAGE**
+	} else {
+		// if not winner: receive failure notice
+		alert("Error - You did not win this auction.");
+	}
+};
+
+//called if auction has ended
+function auctionEnded(auctionId) {
+	document.getElementById("auctionMessage").textContent = "This auction has ended."
+	document.getElementById("bidForm").style.display = "none";
+	document.getElementById("bid").innerHTML = "<button id =\"payNowButton\" onclick = payNow()>Pay Now</button>";
+	document.getElementById("expeditedShipping").style.display = "block";
+	
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/auctions/" + auctionId,
+		type: 'GET',
+		success: function(auction) {
+			var highestPrice = $("#highestPrice");
+			
+			//display id of highest bidder
+			if (auction.highestBidID) {
+				highestPrice.html("<b>Winning Bid: </b>" + auction.highestPrice);
+				getHighestBidder(auction.highestBidID, true);
+			} else { 
+				highestPrice.text("");
+				$("#highestBidderId").html("<b>The auction is over but no bids were placed.</b>"); 
+			}
+		}, 
+        error: function(jqXHR, textStatus, errorThrown) {
+        	$("#auctionMessage").text("error getting ended auction."); //give more descriptive error msg. and maybe condition checking.
+        	$('#auctionMessage').css('color', 'red');
+        	console.error("AJAX Error:", textStatus, errorThrown);
+            console.error("Response Text:", jqXHR.responseText);
+        }
+	});
+}
+
+//form to submit bids
+$("#bidForm").submit(function(e) {
+	e.preventDefault();
+	var bidData = {
+		auctionID: auctionId,
+		userID: userId, //get user id from session
+		amount: $("#bidAmount").val()
+	};
+	
+	if (!userId) {
+		alert("You must be signed in to bid!");
+		return;
+	}
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/bid",
+		type: 'POST',
+		contentType: "application/json",
+		data: JSON.stringify(bidData),
+		success: function(result) {
+			$("#bidMessage").text("Bid placed.");
+			$("#bidMessage").css('color', 'black');
+			$("#highestPrice").html("<b>Current Highest Bid: </b>" + bidData.amount); //update with new highest bid + bidderID
+			$("#highestBidderId").html("<b>Highest Bidder ID: </b>" + bidData.userID);
+			//bidPlaced(auctionId);
+		},
+        error: function(jqXHR, textStatus, errorThrown) {
+        	$("#bidMessage").text(jqXHR.responseText); //give more descriptive error msg. and maybe condition checking.
+        	$('#bidMessage').css('color', 'red');
+            console.error("AJAX Error:", textStatus, errorThrown);
+            console.error("Response Text:", jqXHR.responseText);
+        }
+	});
+	
+
+});
+</script>
+
+</body>
+</html>

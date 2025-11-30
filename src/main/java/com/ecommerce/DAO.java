@@ -43,22 +43,33 @@ public class DAO {
 			return bids;
 	}
 	
-	public void createBid(Bid bid) {
+	public int createBid(Bid bid) {
 		String sql = "INSERT INTO Bids(AuctionID, UserID, BidTime, BidAmount) VALUES (?, ?, ?, ?)";
 		try (Connection conn = DatabaseConnection.connectAuction();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setInt(1,  bid.getAuctionID());
-				pstmt.setInt(2,  bid.getUserID());
+				pstmt.setLong(2,  bid.getUserID());
 				pstmt.setLong(3, System.currentTimeMillis()/1000);
 				pstmt.setDouble(4,  bid.getAmount());
 				pstmt.executeUpdate();
+				
+				//get id of the bid that was just added to the table
+				String lastIdSql = "SELECT last_insert_rowid()";
+	            try (Statement stmt = conn.createStatement();
+	                 ResultSet rs = stmt.executeQuery(lastIdSql)) {
+	                if (rs.next()) {
+	                    int lastId = rs.getInt(1);
+	                    return lastId;
+	                }
+	            }
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
+		return -1; // if not successful
 	}
 	
 	public List<Auction> readAllAuctions() {
-		String sql = "SELECT AuctionID, AuctionEndtime, HighestPrice, HighestBidID, ItemID FROM Auction";
+		String sql = "SELECT AuctionID, AuctionEndtime, HighestPrice, HighestBidID, Processed FROM Auction";
 		List<Auction> auctions = new ArrayList<>();
 		
 		try (Connection conn = DatabaseConnection.connectAuction(); 
@@ -71,8 +82,7 @@ public class DAO {
 				auction.setEndTime(rs.getInt("AuctionEndtime"));
 				auction.setHighestPrice(rs.getDouble("HighestPrice"));
 				auction.setHighestBidID(rs.getInt("HighestBidID"));
-				auction.setItemID(rs.getInt("ItemID"));
-				
+				auction.setProcessed(rs.getInt("Processed"));
 				auctions.add(auction); 
 				} 
 			}
@@ -83,25 +93,33 @@ public class DAO {
 	}
 	
 	//create a new auction
-	public boolean create(Auction auction) {
-		String sql = "INSERT INTO Auction(AuctionEndtime, HighestPrice, HighestBidID, ItemID) VALUES (?,?,?,?)";
+	public int create(Auction auction) {
+		String sql = "INSERT INTO Auction(AuctionID, AuctionEndtime) VALUES (?,?)";
 		try (Connection conn = DatabaseConnection.connectAuction();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setLong(1, auction.getEndTime());
-			pstmt.setDouble(2,  auction.getHighestPrice());
-			pstmt.setInt(3,  auction.getHighestBidID());
-			pstmt.setInt(4,  auction.getItemID());
+			pstmt.setInt(1, auction.getId());
+			pstmt.setLong(2, auction.getEndTime());
 			pstmt.executeUpdate();
+			
+			//get id of the auction that was just added to the table
+			String lastIdSql = "SELECT last_insert_rowid()";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(lastIdSql)) {
+                if (rs.next()) {
+                    int lastId = rs.getInt(1);
+                    return lastId;
+                }
+            }
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-			return false;
+			return -1;
 		}
-		return true; //if auction successfully created in database
+		return -1; //if auction successfully created in database
 	}
 	
 	//get auction with AuctionID = id
 	public Auction read(int id) {
-		String sql = "SELECT AuctionID, AuctionEndtime, HighestPrice, HighestBidID, ItemID FROM Auction WHERE AuctionID = ?";
+		String sql = "SELECT AuctionID, AuctionEndtime, HighestPrice, HighestBidID, Processed FROM Auction WHERE AuctionID = ?";
 		Auction auction = null;
 		
 		try (Connection conn = DatabaseConnection.connectAuction();
@@ -120,8 +138,7 @@ public class DAO {
 					auction.setEndTime(rs.getInt("AuctionEndtime"));
 					auction.setHighestPrice(rs.getDouble("HighestPrice"));
 					auction.setHighestBidID(rs.getInt("HighestBidID"));
-
-					auction.setItemID(rs.getInt("ItemID"));
+					auction.setProcessed(rs.getInt("Processed"));
 				}}}
 		
 			catch (SQLException e) {
@@ -143,7 +160,7 @@ public class DAO {
 					bid = new Bid();
 					bid.setBidID(id);			
 					bid.setAuctionID(rs.getInt("AuctionID"));
-					bid.setUserID(rs.getInt("UserID"));
+					bid.setUserID(rs.getLong("UserID"));
 					bid.setBidTime(rs.getLong("BidTime"));
 					bid.setAmount(rs.getDouble("BidAmount"));
 				}}}
@@ -172,7 +189,23 @@ public class DAO {
 		}
 	}
 	
-	//auction cancelled
+	//mark an auction as processed - i.e. auction end notification has been handled
+	public void updateAuctionProcess(int id, Auction auction) {
+		String sql = "UPDATE Auction SET Processed = ? WHERE AuctionID = ?";
+		
+		try (Connection conn = DatabaseConnection.connectAuction();
+			PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			//set parameters
+			pstmt.setInt(1, 1);
+			pstmt.setInt(2, id);
+			//Update auction 
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	//delete auction
 	public void deleteAuction(int id) {
 		String sql = "DELETE FROM Auction WHERE AuctionID = ?";
 		try (Connection conn = DatabaseConnection.connectAuction();

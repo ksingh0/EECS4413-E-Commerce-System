@@ -9,12 +9,8 @@ public class Catalogue {
 	private int item_id; 
 	@JsonProperty("item_name")
 	private String item_name;
-	@JsonProperty("current_bid")
-	private double current_bid;
 	@JsonProperty("auction_type")
 	private String auction_type;
-	@JsonProperty("remaining_time")
-	private String remaining_time;
 	@JsonProperty("item_description")
 	private String item_description;
 	@JsonProperty("shipping_time")
@@ -45,28 +41,12 @@ public class Catalogue {
 		this.item_name = item_name;
 	}
 	
-	public double getCurrentBid() {
-		return current_bid;
-	}
-	
-	public void setCurrentBid(double current_bid) {
-		this.current_bid = current_bid;
-	}
-	
 	public String getAuctionType() {
 		return auction_type;
 	}
 	
 	public void setAuctionType(String auction_type) {
 		this.auction_type = auction_type;
-	}
-	
-	public String getRemainingTime() {
-		return remaining_time;
-	}
-	
-	public void setRemainingTime(String remaining_time) {
-		this.remaining_time = remaining_time;
 	}
 	
 	public String getItemDescription() {

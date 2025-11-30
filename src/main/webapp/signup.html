@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Sign Up</h1>
+    </header>
+
+    <div class="container">
+        <form id="signupForm">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+
+            <label>Password:</label>
+            <input type="password" id="password" required>
+
+            <label>First Name:</label>
+            <input type="text" id="firstName" required>
+
+            <label>Last Name:</label>
+            <input type="text" id="lastName" required>
+
+            <label>Street Number:</label>
+            <input type="text" id="streetNumber" required>
+
+            <label>Street Name:</label>
+            <input type="text" id="streetName" required>
+
+            <label>City:</label>
+            <input type="text" id="city" required>
+
+            <label>State/Province:</label>
+            <input type="text" id="state">
+
+            <label>Country:</label>
+            <input type="text" id="country" required>
+
+            <label>Postal Code:</label>
+            <input type="text" id="postalCode" required>
+
+            <input type="submit" value="Create Account">
+        </form>
+        <p id="message"></p>
+        <p>Already have an account? <a href="signin.html">Sign In</a></p>
+    </div>
+
+    <footer>
+        <p>eCommerce Auction Platform</p>
+    </footer>
+
+    <script>
+        $("#signupForm").submit(function(e) {
+            e.preventDefault();
+
+            const userData = {
+                username: $("#username").val(),
+                password: $("#password").val(),
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                streetNumber: $("#streetNumber").val(),
+                streetName: $("#streetName").val(),
+                city: $("#city").val(),
+                state: $("#state").val(),
+                country: $("#country").val(),
+                postalCode: $("#postalCode").val()
+            };
+
+            $.ajax({
+                url: "http://localhost:8080/ecommerce-auction-system/api/users/signup",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(userData),
+                success: function(result) {
+                    $("#message").css("color", "green").text("Account created!");
+                    setTimeout(() => location.href = "signin.html?registered=true", 1500);
+                },
+                error: function(xhr) {
+                    $("#message").css("color", "red").text(xhr.responseJSON ?.error || "Sign up failed.");
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

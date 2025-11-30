@@ -11,6 +11,7 @@ import java.util.List;
 public class CatalogueController {
 	
 	CatalogueDAO catalogueDAO = new CatalogueDAO();
+	DAO auctionDAO = new DAO();
 	
 	@GET
 	@Path("/items")
@@ -45,6 +46,7 @@ public class CatalogueController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteItem(@PathParam("id") int id) {
 		catalogueDAO.deleteItem(id);
+		auctionDAO.deleteAuction(id); //delete auction as well for referential integrity
 	}
 }
 

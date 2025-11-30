@@ -1,13 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
-                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
-	version="5.0">
-
-	<display-name>EECS4413 E-Commerce System</display-name>
-
 	<!-- Jersey Servlet -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	
+	<listener>
+    <listener-class>com.ecommerce.AuctionManager</listener-class>
+  </listener>
+	
+	<!-- Jersey Servlet configurations -->
+	<display-name>E-Commerce Auction System</display-name>
+
+    <!-- Default homepage -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- REST Controller -->
 	<servlet>
 		<servlet-name>JerseyServlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -26,11 +36,6 @@
 		<servlet-name>JerseyServlet</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-
-	<!-- Default welcome page -->
-	<welcome-file-list>
-		<welcome-file>Login.html</welcome-file>
-	</welcome-file-list>
 
 	<servlet>
 		<servlet-name>Payment</servlet-name>
@@ -82,4 +87,51 @@
 		<welcome-file>Login.html</welcome-file>
 	</welcome-file-list>
 
+</web-app>
+		<servlet-name>Jersey REST Service</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+
+
+    <!--  SESSION PROTECTION FILTER  -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.ecommerce.AuthFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/*</url-pattern> 
+    </filter-mapping>
+	
+		<servlet>
+        <servlet-name>Auction Page</servlet-name>
+        <jsp-file>/Auction.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Auction Page</servlet-name>
+		<url-pattern>/auction</url-pattern>
+	</servlet-mapping>
+		
+	
+	<servlet>
+        <servlet-name>Create Auction</servlet-name>
+        <jsp-file>/CreateAuction.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Create Auction</servlet-name>
+		<url-pattern>/create-auction</url-pattern>
+	</servlet-mapping>
+
+<!--
+	<servlet>
+        <servlet-name>404</servlet-name>
+        <jsp-file>/404NotFound.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>404</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>	
+-->
+	
 </web-app>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Update User</h1>
+    </header>
+
+    <div class="container">
+        <form id="updateForm"></form>
+        <p id="message" style="text-align: center;"></p>
+    </div>
+
+    <footer>
+        <p>eCommerce Auction Platform</p>
+    </footer>
+
+    <script>
+        const userId = new URLSearchParams(window.location.search).get("id");
+
+        // FIXED URL with template literal
+        $.get(`http://localhost:8080/EECS4413-E-Commerce-System/api/users/${userId}`, function(user) {
+            $("#updateForm").html(`
+        <label>First Name:</label>
+        <input type="text" id="firstName" value="${user.firstName}" required>
+
+        <label>Last Name:</label>
+        <input type="text" id="lastName" value="${user.lastName}" required>
+
+        <label>Street Number:</label>
+        <input type="text" id="streetNumber" value="${user.streetNumber}" required>
+
+        <label>Street Name:</label>
+        <input type="text" id="streetName" value="${user.streetName}" required>
+
+        <label>City:</label>
+        <input type="text" id="city" value="${user.city}" required>
+
+        <label>State/Province:</label>
+        <input type="text" id="state" value="${user.state || ''}">
+
+        <label>Country:</label>
+        <input type="text" id="country" value="${user.country}" required>
+
+        <label>Postal Code:</label>
+        <input type="text" id="postalCode" value="${user.postalCode}" required>
+
+        <label>New Password (leave blank to keep current):</label>
+        <input type="password" id="password">
+
+        <input type="submit" value="Update Profile">
+    `);
+        });
+
+        $(document).on("submit", "#updateForm", function(e) {
+            e.preventDefault();
+
+            const updates = {
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                streetNumber: $("#streetNumber").val(),
+                streetName: $("#streetName").val(),
+                city: $("#city").val(),
+                state: $("#state").val(),
+                country: $("#country").val(),
+                postalCode: $("#postalCode").val()
+            };
+
+            const password = $("#password").val();
+            if (password.trim() !== "") updates.password = password;
+
+            $.ajax({
+                url: `http://localhost:8080/EECS4413-E-Commerce-System/api/users/${userId}`,
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(updates),
+                success: function() {
+                    $("#message").css("color", "green").text("Profile updated successfully!");
+                },
+                error: function(xhr) {
+                    $("#message").css("color", "red").text(xhr.responseJSON ?.error || "Update failed.");
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

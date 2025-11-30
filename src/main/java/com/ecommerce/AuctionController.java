@@ -34,17 +34,25 @@ public class AuctionController {
 	public Auction getAuction(@PathParam("AuctionID") int AuctionID) {
 		//call to DAO to retrieve a specific auction by ID
 		Auction auction =  auctionDAO.read(AuctionID);
-		
 		return auction;
+	}
+	
+	//check if auction is ended
+	@GET
+	@Path("/{AuctionID}/ended")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean isAuctionEnded(@PathParam("AuctionID") int AuctionID) {
+		//get auction by ID
+		Auction auction =  auctionDAO.read(AuctionID);
+		return auction.isEnded();
 	}
 	
 	@POST
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createAuction(Auction auction) {
+	public int createAuction(Auction auction) {
 		//call to DAO to create new auction (e.g. newly updated item)
-		auction.createTimer();
-		auctionDAO.create(auction);
+		return auctionDAO.create(auction);
 	}
 	
 	@PUT
@@ -58,7 +66,16 @@ public class AuctionController {
 		auctionDAO.updateAuction(AuctionID, auction);
 	}
 	
-	//delete auction - e.g. if cancelled by seller ?
+	@PUT
+	@Path("/{AuctionID}/processed")
+	@Consumes (MediaType.APPLICATION_JSON)
+	@Produces (MediaType.APPLICATION_JSON)
+	public void processAuction(@PathParam("AuctionID") int AuctionID, Auction auction) {
+		// update when auction has been processed
+		auctionDAO.updateAuctionProcess(AuctionID, auction);
+	}
+	
+	//delete auction
 	@DELETE
 	@Path("/{AuctionID}")
 	@Produces(MediaType.APPLICATION_JSON) 
