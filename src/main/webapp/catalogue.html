@@ -43,7 +43,7 @@
  
 function loadItems(keyword=""){
 	
-	let url = "http://localhost:8080/EECS4413-E-Commerce-System/items";
+	let url = "http://localhost:8080/EECS4413-E-Commerce-System/api/items";
 	//load only the items that match keyword, send it to controller
 	if(keyword !== ""){
 		url += "?keyword=" + encodeURIComponent(keyword);
@@ -75,7 +75,12 @@ function loadItems(keyword=""){
  			row.append($("<td></td>").text("$" + item.current_bid));
  			row.append($("<td></td>").text(item.auction_type));
  			row.append($("<td></td>").text(item.remaining_time));
- 			row.append($("<td></td>").html(`<button onclick="viewItem(${item.item_id})">View Item</button>`));
+ 			
+ 			var button = $("<button>View Item</button>");
+ 			button.on("click", function(){
+ 				 viewItem(item.item_id);
+ 			})
+ 			row.append($("<td></td>").append(button));
  			tbody.append(row);
 				
 		 });
@@ -102,7 +107,7 @@ function loadItems(keyword=""){
 	});
 	//Go to specifc item using its id, go to item.html page to see item details and to bid for
 	function viewItem(id) {
-		window.location.href= "item.html?itemId" + id;
+		window.location.href= "itemDetails?item_id=" + id;
 	}
 </script>
 
