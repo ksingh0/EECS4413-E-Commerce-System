@@ -3,34 +3,48 @@
  */
 
 const user_id = sessionStorage.getItem("userId")
+var bidSocket;
 var auctionSocket = new WebSocket(`ws://localhost:8080/ecommerce-auction-system/notif?userId=${user_id}`); 
-/*
-function login() {
-	const userId = sessionStorage.getItem("userId");
-	console.log("notifcations.js logion() " + userId); //debug
-	
-	auctionSocket = new WebSocket(`ws://localhost:8080/ecommerce-auction-system/notif?userId=${userId}`); 
-*/
-	auctionSocket.onopen = function (event) {
+
+auctionSocket.onopen = function (event) {
+		console.log("Connection established for auction end updates.");
+};
+			
+auctionSocket.onmessage = function (event) {
+	   document.getElementById("notification").innerHTML += "<p>" + event.data + "</p>";
+	   console.log(event.data);
+};
+
+auctionSocket.onclose = function (event) {
+	    console.log("auctionSocket closed.");
+};
+			
+auctionSocket.onerror = function (error) {
+	   console.error("auctionSocket Error: " + error);
+};
+
+
+function bidPlaced(auctionId) {
+	bidSocket = new bidSocket(`ws://localhost:8080/ecommerce-auction-system/bidNotif`); 
+	//bid socket
+	bidSocket.onopen = function (event) {
 			console.log("Connection established for bidding updates.");
 	};
 			
-	auctionSocket.onmessage = function (event) {
+	bidSocket.onmessage = function (event) {
 		   document.getElementById("notification").innerHTML += "<p>" + event.data + "</p>";
 		   console.log(event.data);
 	};
 
-	auctionSocket.onclose = function (event) {
-		    console.log("Connection closed.");
+	bidSocket.onclose = function (event) {
+		    console.log("bidSocket closed.");
 	};
 			
-	auctionSocket.onerror = function (error) {
-		   console.error("WebSocket Error: " + error);
+	bidSocket.onerror = function (error) {
+		   console.error("bidSocket Error: " + error);
 	};
-
-
-function bidPlaced(auctionId) {
-    auctionSocket.send("A new bid was placed on auction with id " + auctionId);
+	
+    bidSocket.send("A new bid was placed on auction with id " + auctionId);
 	console.log("bidPlaced(): sending bid message...");
 }
 

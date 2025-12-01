@@ -10,6 +10,7 @@
 <body>
 
 <header><h1>Auction</h1> </header>
+<div id = "notification"></div>
 <div class = "container">
 	<div class = "column">
 		<div id = "item">
@@ -49,8 +50,6 @@
 		<button>Add to Wishlist</button>
 	</div>
 </div>
-
-<div id = "notification"></div>
 
 <!-------------------------- Javascript Below------------------------------------>
 <script>
@@ -222,7 +221,7 @@ $("#bidForm").submit(function(e) {
 			$("#bidMessage").css('color', 'black');
 			$("#highestPrice").html("<b>Current Highest Bid: </b>$" + bidData.amount); //update with new highest bid + bidderID
 			$("#highestBidderId").html("<b>Highest Bidder ID: </b>" + bidData.userID);
-			//bidPlaced(auctionId);
+			bidPlaced(auctionId);
 		},
         error: function(jqXHR, textStatus, errorThrown) {
         	$("#bidMessage").text(jqXHR.responseText); //give more descriptive error msg. and maybe condition checking.

@@ -7,7 +7,6 @@
     <title>Sign In</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src = "notification.js"></script>
 </head>
 
 <body>
@@ -54,7 +53,6 @@
                     alert("Login successful");
                     window.location.href = "dashboard.html";
                     sessionStorage.setItem("userId", res.userId);
-                
                 },
                 error: () => alert("Invalid login")
             });

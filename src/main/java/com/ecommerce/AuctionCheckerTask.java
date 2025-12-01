@@ -18,6 +18,7 @@ public class AuctionCheckerTask implements Runnable {
 	public void run() {
 		AuctionController auctionController = new AuctionController();
 		BidController bidController = new BidController();
+		MessageController msgController = new MessageController();
 		
 		System.out.println("Auction checker task ran");
 		
@@ -43,6 +44,11 @@ public class AuctionCheckerTask implements Runnable {
 				String message = "An auction you bidded on has ended: Auction " + id;
 				for (Long userId : allBidderIds) {
 					WebsocketServer.auctionEndedNotification(userId, message);
+					Message msg = new Message();
+					msg.setAuctionId(id);
+					msg.setUserId(userId);
+					msg.setMessage(String.format("An auction you bidded on has ended: Auction %d", id));
+					msgController.postMessage(msg);
 				}
 
 				a.setProcessed(1);

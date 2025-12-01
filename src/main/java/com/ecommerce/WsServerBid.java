@@ -1,7 +1,5 @@
 package com.ecommerce;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.EncodeException;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -18,18 +16,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@ServerEndpoint("/notif")
-public class WebsocketServer {
+@ServerEndpoint("/bidNotif")
+public class WsServerBid {
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
-    private static ConcurrentHashMap<Long, Session> userSessions = new ConcurrentHashMap<Long,Session>();
     		
     @OnOpen
     public void onOpen(Session session) {
     	String query = session.getQueryString();
     	Long userId = Long.parseLong(query.replace("userId=", ""));
-        userSessions.put(userId, session);
         session.getUserProperties().put("userId", userId);
-        session.setMaxIdleTimeout(60*30*1000); // prevent session timeout
+        session.setMaxIdleTimeout(60*30*1000); // prevent session timeout while user is logged in
         
         sessions.add(session);
         System.out.println("New bidder connected: " + session.getId() + " Userid: " + userId);
@@ -49,28 +45,16 @@ public class WebsocketServer {
 
     @OnMessage
     public static void onMessage(String message, Session session) {
-        // Handle incoming bid messages and then broadcast the update
-        System.out.println("broadcasttext: " + message);
+       for (Session s : sessions) {
+    	   if (!s.equals(session)) { // send notification to other bidders - do not include session that bidded
                 try {
                 	session.getBasicRemote().sendText(message);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            
+    	   }
+       }
     }
-    
-    public static void auctionEndedNotification(Long userId, String message) {
-    	System.out.println("auctionEndedNotification triggered");
-    	
-    	for (Session s : sessions) {
-    		//check sessions for associated userId and send notifs to only those that match
-    		if ( (Long) s.getUserProperties().get("userId") == userId) {
-    			onMessage(message, s);
-    		} 
-    		else {
-    			System.out.println("User doesn't match");
-    		}
-    	}
-    }
+  
 }
+   

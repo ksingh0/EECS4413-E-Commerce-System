@@ -82,6 +82,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Create Auction</servlet-name>
 		<url-pattern>/create-auction</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>Inbox</servlet-name>
+        <jsp-file>/inbox.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Inbox</servlet-name>
+		<url-pattern>/inbox</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
