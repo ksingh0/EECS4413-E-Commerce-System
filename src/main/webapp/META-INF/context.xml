@@ -16,8 +16,4 @@ type="javax.sql.DataSource" driverClassName="org.sqlite.JDBC"
 url="jdbc:sqlite::resource:Users.db"/>
 
 
-<<<<<<< HEAD
 </Context>
-=======
-</Context>
->>>>>>> origin/kris-deliverable3
