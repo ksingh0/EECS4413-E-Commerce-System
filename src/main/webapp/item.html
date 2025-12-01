@@ -55,7 +55,7 @@ function loadItemDetails(){
 	const item_id = getItemId();
 	
 	$.ajax({
-		 url: "http://localhost:8080/EECS4413-E-Commerce-System/api/item/" + item_id,
+		 url: "http://localhost:8080/EECS4413-E-Commerce-System/api/items/" + item_id,
 		 type: 'GET',
 		 success: function(item){
 		 //retrieve item user clicked on: 

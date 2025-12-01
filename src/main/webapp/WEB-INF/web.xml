@@ -46,7 +46,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<servlet-mapping>
 		<servlet-name>CataloguePage</servlet-name>
-		<url-pattern>/api/catalogue</url-pattern>
+		<url-pattern>/catalogue</url-pattern>
 	</servlet-mapping>
 	
 	
@@ -57,7 +57,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<servlet-mapping>
 		<servlet-name>ItemPage</servlet-name>
-		<url-pattern>/api/itemDetails/*</url-pattern>
+		<url-pattern>/itemDetails/*</url-pattern>
 	</servlet-mapping>
 
 
