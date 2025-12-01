@@ -133,4 +133,39 @@ public class CatalogueDAO {
 			System.out.println(e.getMessage());
 		}
 	}
+	public List<Catalogue> searchItems(String keyword) {
+		//Columns in items table from Catalogue Database
+		//search for items with specific keyword in catalogue.db
+		List<Catalogue> items = new ArrayList<>();
+		String sql = "SELECT * FROM items where item_name LIKE ?";
+
+		try (Connection conn = DatabaseConnection.connectCatalogue();
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
+				
+
+			String pattern = "%" + keyword + "%";
+			stmt.setString(1, pattern);
+			
+		try (ResultSet rs = stmt.executeQuery()) {
+			while (rs.next()) {
+				Catalogue item = new Catalogue();
+				item.setItemID(rs.getInt("item_id"));
+				item.setItemName(rs.getString("item_name"));
+				item.setCurrentBid(rs.getDouble("current_bid"));
+				item.setAuctionType(rs.getString("auction_type"));
+				item.setRemainingTime(rs.getString("remaining_time"));
+				item.setItemDescription(rs.getString("item_description"));
+				item.setShippingTime(rs.getString("shipping_time"));
+				item.setEndDate(rs.getString("end_date"));
+				item.setInitialPrice(rs.getDouble("initial_price"));
+				item.setShippingCost(rs.getDouble("shipping_cost"));
+				item.setExpeditedShipping(rs.getDouble("expedited_shipping"));
+				items.add(item);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return items;
+	}
 }

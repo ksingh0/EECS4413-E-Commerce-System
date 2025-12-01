@@ -12,11 +12,15 @@ import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.math.BigInteger;
 
+
+
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 
 public class UserController {
+	@Context
+	private HttpServletRequest request;
 
     private final UserDAO userDAO = new UserDAO();
 
@@ -232,5 +236,16 @@ public class UserController {
         
         userDAO.delete(id);
         return Response.noContent().build();
+    }
+    
+    @POST
+    @Path("/logout")
+    public Response logout() {
+    	// Remove the stored session variables
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return Response.ok("{\"success\":true}").build();
     }
 }

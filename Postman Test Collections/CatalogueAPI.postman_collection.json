@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "fe931cd9-aa35-4977-bc7c-3a80ab11e8cd",
+		"_postman_id": "84bd2327-3d91-4a5c-ac3f-56034bc94789",
 		"name": "CatalogueAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "49744176",
-		"_collection_link": "https://ksingh0-e2b719e4-6265254.postman.co/workspace/4413~866d8843-c780-45a0-9cfa-c3d6bcb557ef/collection/49744176-fe931cd9-aa35-4977-bc7c-3a80ab11e8cd?action=share&source=collection_link&creator=49744176"
+		"_exporter_id": "48275140",
+		"_collection_link": "https://kim29-777407f7-2058581.postman.co/workspace/Kimberly-Bonilla's-Workspace~e683e1af-663e-4fa6-83fa-31f51ef4221d/collection/48275140-84bd2327-3d91-4a5c-ac3f-56034bc94789?action=share&source=collection_link&creator=48275140"
 	},
 	"item": [
 		{
@@ -17,7 +17,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"itemName\": \"Wireless Keyboard\",\n  \"itemDescription\": \"Bluetooth keyboard compatible with multiple devices\",\n  \"initialPrice\": 70.00,\n  \"currentBid\": 150.00,\n  \"endDate\": \"2025-11-10\",\n  \"remainingTime\": 8,\n  \"auctionType\": \"forward\",\n  \"shippingTime\": \"5-7 business days\",\n  \"shippingCost\": 10.99,\n  \"expeditedShipping\": 19.99\n}",
+					"raw": "{\n  \"item_id\": 2,\n  \"item_name\": \"Laptop\",\n  \"current_bid\": 200.00,\n  \"auction_type\": \"Forward\",\n  \"remaining_time\": \"30\",\n  \"item_description\": \"Brand new laptop\",\n  \"shipping_time\": \"3 days\",\n  \"end_date\": \"2025-02-10\",\n  \"initial_price\": 150.00,\n  \"shipping_cost\": 12.99,\n  \"expedited_shipping\": 19.99\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -25,7 +25,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item",
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/items",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -33,7 +33,8 @@
 					"port": "8080",
 					"path": [
 						"EECS4413-E-Commerce-System",
-						"item"
+						"api",
+						"items"
 					]
 				}
 			},
@@ -57,7 +58,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/items",
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/items",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -65,6 +66,7 @@
 					"port": "8080",
 					"path": [
 						"EECS4413-E-Commerce-System",
+						"api",
 						"items"
 					]
 				}
@@ -84,7 +86,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item/1",
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/items/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,8 +94,9 @@
 					"port": "8080",
 					"path": [
 						"EECS4413-E-Commerce-System",
-						"item",
-						"1"
+						"api",
+						"items",
+						"2"
 					]
 				}
 			},
@@ -114,7 +117,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/item/1",
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/items/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -122,8 +125,9 @@
 					"port": "8080",
 					"path": [
 						"EECS4413-E-Commerce-System",
-						"item",
-						"1"
+						"api",
+						"items",
+						"2"
 					]
 				}
 			},
@@ -147,6 +151,54 @@
 						"1"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item details  HTML",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/itemDetails?item_id=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"itemDetails"
+					],
+					"query": [
+						{
+							"key": "item_id",
+							"value": "2"
+						}
+					]
+				},
+				"description": "When user clicks on desired item to bid for."
+			},
+			"response": []
+		},
+		{
+			"name": "Catalogue HTML",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/EECS4413-E-Commerce-System/catalogue",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"EECS4413-E-Commerce-System",
+						"catalogue"
+					]
+				},
+				"description": "Display Auction Items. use nav bar to filter items using keywords. "
 			},
 			"response": []
 		}

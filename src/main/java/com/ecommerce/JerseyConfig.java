@@ -8,6 +8,9 @@ import jakarta.ws.rs.ApplicationPath;
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         packages("com.ecommerce");
+        //disable warning in console
+        property("jersey.config.server.wadl.disableWadl", true);
+
     }
     
 }

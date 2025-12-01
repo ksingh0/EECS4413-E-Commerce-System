@@ -29,6 +29,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<init-param>
 			<param-name>jersey.config.server.provider.classnames</param-name>
 			<param-value>org.glassfish.jersey.jackson.JacksonFeature</param-value>
+			<param-name>jersey.config.server.wadl.disableWadl</param-name>
+			<param-value>true</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -126,4 +128,36 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>	
 -->
 	
+</web-app>
+		<servlet>
+		<servlet-name>Wishlist</servlet-name>
+		<jsp-file>/Wishlist.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Wishlist</servlet-name>
+		<url-pattern>/wishlist</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CataloguePage</servlet-name>
+		<jsp-file>/catalogue.html</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CataloguePage</servlet-name>
+		<url-pattern>/catalogue</url-pattern>
+	</servlet-mapping>
+	
+	
+		<servlet>
+		<servlet-name>ItemPage</servlet-name>
+		<jsp-file>/item.html</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ItemPage</servlet-name>
+		<url-pattern>/itemDetails/*</url-pattern>
+	</servlet-mapping>
+
+
 </web-app>
