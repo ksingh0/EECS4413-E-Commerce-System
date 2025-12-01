@@ -17,6 +17,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    
+    <!-- Error page -->
+    <error-page>
+    	<error-code>404</error-code>
+    	<location>/404NotFound.html</location>
+    </error-page>
 
     <!-- REST Controller -->
 	<servlet>
@@ -125,17 +131,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/api/*</url-pattern> 
     </filter-mapping>
 
-
-<!-- catch all error page
-	<servlet>
-        <servlet-name>404</servlet-name>
-        <jsp-file>/404NotFound.html</jsp-file>
-   	</servlet>
-	<servlet-mapping>
-		<servlet-name>404</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>	
--->
 	<servlet>
 		<servlet-name>Wishlist</servlet-name>
 		<jsp-file>/Wishlist.html</jsp-file>
