@@ -10,7 +10,7 @@ public class WishlistDAO {
 	public List<Auction> readAllWishlists(long userid) {
 		String sql = """
 		        SELECT A.AuctionID, A.AuctionEndtime, A.HighestPrice,
-		               A.HighestBidID, A.ItemID
+		               A.HighestBidID
 		        FROM Wishlist W
 		        JOIN Auction A ON W.auctionid = A.AuctionID
 		        WHERE W.UserID = ?
@@ -31,8 +31,7 @@ public class WishlistDAO {
 	                    auction.setEndTime(rs.getInt("AuctionEndTime"));
 	                    auction.setHighestPrice(rs.getDouble("HighestPrice"));
 	                    auction.setHighestBidID(rs.getInt("HighestBidID"));
-	                    auction.setItemID(rs.getInt("ItemID"));
-
+	                    
 	                    auctions.add(auction);
 	                }
 	            }} catch (SQLException e) {

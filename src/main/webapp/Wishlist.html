@@ -3,14 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>List Students</title>
+<title>Wishlist</title>
 <link rel="stylesheet" href="styles.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src = "notification.js"></script>
 </head>
 <body>
 	<header>
 		<h1>Wishlist Dashboard</h1>
 	</header>
+	<div id="navBar">
+	<nav>
+	  <a href="http://localhost:8080/ecommerce-auction-system/catalogue"><button class ="navButton">CATALOGUE</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/create-auction"><button class ="navButton">CREATE AUCTION</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/inbox"><button class ="navButton">INBOX</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/wishlist"><button class ="navButton">WISHLIST</button></a>  
+	  <a href="http://localhost:8080/ecommerce-auction-system/logout"><button class ="navButton">LOGOUT</button></a>
+	</nav>
+</div>
+<div id ="notification"></div>
 	<div class="container">
 		<table id="wishlistTable" border="1">
 			<tr>
@@ -29,7 +40,7 @@
 	<script>
 		$(document).ready(function() {
 			$.ajax({
-				url : "http://localhost:8080/EECS4413-E-Commerce-System/api/wishlist",
+				url : "http://localhost:8080/ecommerce-auction-system/api/wishlist",
 				type : 'GET',
 				success : function(result) {
 					var table = $("#wishlistTable");
@@ -39,16 +50,16 @@
 						row.append($("<td></td>").text(auction.id));
 						$.ajax({
 							async:false,
-							url : "http://localhost:8080/EECS4413-E-Commerce-System/api/items/" + auction.itemID,
+							url : "http://localhost:8080/ecommerce-auction-system/api/items/" + auction.id,
 							type : 'GET',
 							success : function(result2) {
 								console.log(result2)
 								let list2 = Array.isArray(result2) ? result2 : result2.wishlist || [result2];
 								list2.forEach(function(catalogue) {
-									let auctionLink = "http://localhost:8080/EECS4413-E-Commerce-System/api/auction/" + auction.id;
+									let auctionLink = "http://localhost:8080/ecommerce-auction-system/auction?id=" + auction.id;
 				                    let linkElement = $("<a></a>")
 				                        .attr("href", auctionLink)
-				                        .text(catalogue.itemName);
+				                        .text(catalogue.item_name);
 
 				                    row.append($("<td></td>").append(linkElement));
 								});
@@ -57,13 +68,14 @@
 								console.log(error);
 							}
 						});
-						row.append($("<td></td>").text(auction.highestPrice));
-						row.append($("<td></td>").text(auction.endTime));
+						row.append($("<td></td>").text("$" + auction.highestPrice));
+						var endDate = new Date(parseInt(auction.endTime)*1000);
+						row.append($("<td></td>").text(endDate));
 						
 						// Implements delete request functionality
 						let deleteButton = $("<button>Remove</button>").click(function () {
 						    $.ajax({
-						        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/wishlist/" + auction.id,
+						        url: "http://localhost:8080/ecommerce-auction-system/api/wishlist/" + auction.id,
 						        type: "DELETE",
 						        success: function() {
 						            alert("Remove from wishlist.");
@@ -77,7 +89,7 @@
 						});
 
 						row.append($("<td></td>").append(deleteButton));
-						//row.append($("<td></td>").text("http://localhost:8080/EECS4413-E-Commerce-System/api/auction/" + auction.id));
+						//row.append($("<td></td>").text("http://localhost:8080/ecommerce-auction-system/api/auction/" + auction.id));
 						table.append(row);
 					});
 				},

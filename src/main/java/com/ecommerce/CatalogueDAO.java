@@ -151,9 +151,7 @@ public class CatalogueDAO {
 				Catalogue item = new Catalogue();
 				item.setItemID(rs.getInt("item_id"));
 				item.setItemName(rs.getString("item_name"));
-				item.setCurrentBid(rs.getDouble("current_bid"));
 				item.setAuctionType(rs.getString("auction_type"));
-				item.setRemainingTime(rs.getString("remaining_time"));
 				item.setItemDescription(rs.getString("item_description"));
 				item.setShippingTime(rs.getString("shipping_time"));
 				item.setEndDate(rs.getString("end_date"));

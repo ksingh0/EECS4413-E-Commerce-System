@@ -34,7 +34,7 @@ public class WishlistController {
         if (val instanceof Integer) { 
             return ((Integer) val).longValue();
         }
-
+        System.out.println(val); //debug
         return null;
     }
 

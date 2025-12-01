@@ -38,7 +38,7 @@
 
     <script>
         $(document).ready(function() {
-            $.get("http://localhost:8080/EECS4413-E-Commerce-System/api/users", function(users) {
+            $.get("http://localhost:8080/ecommerce-auction-system/api/users", function(users) {
                 users.forEach(user => {
                     const fullName = `${user.firstName} ${user.lastName}`;
                     const address = `${user.streetNumber} ${user.streetName}`;
@@ -64,7 +64,7 @@
         function deleteUser(id) {
             if (confirm("Delete this user?")) {
                 $.ajax({
-                    url: `http://localhost:8080/EECS4413-E-Commerce-System/api/users/${id}`,
+                    url: `http://localhost:8080/ecommerce-auction-system/api/users/${id}`,
                     type: "DELETE",
                     success: () => location.reload()
                 });

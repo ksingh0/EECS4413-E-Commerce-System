@@ -3,16 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <title>View Auction</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="styles.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src = "notification.js"></script>
 </head>
 <body>
 
 <header><h1>Auction</h1> </header>
+<div id="navBar">
+	<nav>
+	  <a href="http://localhost:8080/ecommerce-auction-system/catalogue"><button class ="navButton">CATALOGUE</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/create-auction"><button class ="navButton">CREATE AUCTION</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/inbox"><button class ="navButton">INBOX</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/wishlist"><button class ="navButton">WISHLIST</button></a>  
+	  <a href="http://localhost:8080/ecommerce-auction-system/logout"><button class ="navButton">LOGOUT</button></a>
+	</nav>
+</div>
 <div id = "notification"></div>
-<div class = "container">
-	<div class = "column">
+<div class = "containerForColumns">
+	<div class = "containerCol">
 		<div id = "item">
 			<h3 id = "itemName"></h3>
 			<p id ="itemDescription"></p>
@@ -27,6 +36,9 @@
 			<p id ="auctionMessage"></p>
 		</div>
 		
+		
+	</div>
+	<div class ="containerCol" id = "bid">
 		<div id ="expeditedShipping" style = "display: none;">
 				<p> Add Expedited Shipping?</p>
 				<p id ="expeditedShippingCost"></p>
@@ -37,8 +49,7 @@
 				<input type="radio" id ="regularOption" name ="shipping">
 			</form>
 	 	</div>
-	</div>
-	<div class ="column" id = "bid">
+	 	<div id="pay"></div>
 		<form id="bidForm">
 			<label for ="bidAmount"><b>New Bid:</b></label> <br>
 			$ <input id ="bidAmount" type="number" value = "" min="0.00" step="0.01" required>
@@ -47,7 +58,7 @@
 		<p id="bidMessage"></p>
 		
 		<br>
-		<button>Add to Wishlist</button>
+		<button id ="wishlistButton" onclick = addToWishlist()> Add to Wishlist</button>
 	</div>
 </div>
 
@@ -88,9 +99,13 @@ function getHighestBidder(highestBidId, isEnded) {
 $(document).ready(function() {
 	// STEP 1: Get info from catalogue about item.
 	$.ajax({
-		url: "http://localhost:8080/ecommerce-auction-system/api/item/" + itemID,
+		url: "http://localhost:8080/ecommerce-auction-system/api/items/" + itemID,
 		type: 'GET',
 		success: function(item) {
+			if (!item) {
+				$("#itemName").text("Item not found.");
+				$("#itemName").css("color", "red");
+			} 
 			var itemName = $("#itemName");
 			var itemDesc = $("#itemDescription");
 			itemName.text(item.item_name);
@@ -98,7 +113,7 @@ $(document).ready(function() {
 			$("#shippingCost").append(item.shipping_cost);
 			$("#startingPrice").append(item.initial_price);
 			$("#bidAmount").attr("min", item.initial_price);
-			$("#expeditedShippingCost").text(item.expedited_shipping);
+			$("#expeditedShippingCost").text("+$" + item.expedited_shipping);
 			
 			shippingCost = item.shipping_cost;
 			expeditedShipping = item.expedited_shipping;
@@ -171,7 +186,8 @@ function payNow() {
 function auctionEnded(auctionId) {
 	document.getElementById("auctionMessage").textContent = "This auction has ended."
 	document.getElementById("bidForm").style.display = "none";
-	document.getElementById("bid").innerHTML = "<button id =\"payNowButton\" onclick = payNow()>Pay Now</button>";
+	document.getElementById("wishlistButton").style.display = "none";
+	document.getElementById("pay").innerHTML = "<button id =\"payNowButton\" onclick = payNow()>Pay Now</button>";
 	document.getElementById("expeditedShipping").style.display = "block";
 	
 	$.ajax({
@@ -230,9 +246,22 @@ $("#bidForm").submit(function(e) {
             console.error("Response Text:", jqXHR.responseText);
         }
 	});
-	
 
 });
+
+function addToWishlist() {
+	$.ajax({
+	     url: "http://localhost:8080/ecommerce-auction-system/api/wishlist/" + auctionId,
+	     type: "POST",
+	     success: function() {
+	         alert("Added to wishlist.");
+	     },
+        error: function(err) {
+	           console.log(err);
+	           alert("Failed to add item.");
+        }
+	});
+}
 </script>
 
 </body>

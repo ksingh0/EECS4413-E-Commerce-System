@@ -27,7 +27,7 @@
         const userId = new URLSearchParams(window.location.search).get("id");
 
         // FIXED URL with template literal
-        $.get(`http://localhost:8080/EECS4413-E-Commerce-System/api/users/${userId}`, function(user) {
+        $.get(`http://localhost:8080/ecommerce-auction-system/api/users/${userId}`, function(user) {
             $("#updateForm").html(`
         <label>First Name:</label>
         <input type="text" id="firstName" value="${user.firstName}" required>
@@ -78,7 +78,7 @@
             if (password.trim() !== "") updates.password = password;
 
             $.ajax({
-                url: `http://localhost:8080/EECS4413-E-Commerce-System/api/users/${userId}`,
+                url: `http://localhost:8080/ecommerce-auction-system/api/users/${userId}`,
                 type: "PUT",
                 contentType: "application/json",
                 data: JSON.stringify(updates),

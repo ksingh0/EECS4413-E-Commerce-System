@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-    font-family: Arial, sans-serif;
+    font-family: Lato, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
@@ -22,7 +22,39 @@ header h1 {
     font-size: 2em;
 }
 
+button {
+	background-color: #0054d2;
+	color: white;
+	margin: 15 px;
+	padding: 10px;
+	cursor: pointer;
+	font-family: Lato, sans-serif;
+}
+
+button:hover {
+	background-color: #eeeeff;
+	cursor: pointer;
+}
+
 .container {
+    background: #ffffff;
+    margin: 2em auto;
+    padding: 2.5em;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.containerForColumns {
+	display: flex;
+	margin: 0 auto;
+	width: 80%;
+}
+
+
+.containerCol {
     background: #ffffff;
     margin: 2em auto;
     padding: 2.5em;
@@ -109,4 +141,35 @@ th, td {
 th {
     background-color:  rgb(179, 197, 242);
     color: white;
+}
+
+.notification {
+	color: red;
+	background-color: yellow;
+}
+
+nav {
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	background-color: #0054d2;
+	color: white;
+	box-sizing: border-box;
+}
+
+.navButton {
+	background-color: transparent;
+	flex-grow: 1;
+	box-sizing: border-box;
+	border: none;
+	color: white;
+	font-family: Lato, sans-serif;
+}
+
+.navButton:hover {
+	background-color: #83d1fc;
+}
+
+.navbar {
+	width: 100%
 }

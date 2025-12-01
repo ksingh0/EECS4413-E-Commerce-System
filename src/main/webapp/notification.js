@@ -25,7 +25,7 @@ auctionSocket.onerror = function (error) {
 
 
 function bidPlaced(auctionId) {
-	bidSocket = new bidSocket(`ws://localhost:8080/ecommerce-auction-system/bidNotif`); 
+	bidSocket = new WebSocket(`ws://localhost:8080/ecommerce-auction-system/bidNotif`); 
 	//bid socket
 	bidSocket.onopen = function (event) {
 			console.log("Connection established for bidding updates.");

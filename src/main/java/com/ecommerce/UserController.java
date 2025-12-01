@@ -1,4 +1,5 @@
 package com.ecommerce;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -101,22 +102,14 @@ public class UserController {
         )).build();
     }
     
-    /*
-    @GET
-    @Path("/getId")
-    public long getUserId(@Context jakarta.servlet.http.HttpServletRequest request) {
-    	HttpSession session = request.getSession(false);
-    	return (Long) session.getAttribute("userId");
-    }
-    */
-
+/* duplicate logout
     @POST
     @Path("/logout")
     public Response logout(@Context jakarta.servlet.http.HttpServletRequest request) {
         request.getSession().invalidate();
         return Response.ok(Map.of("message","Logged out")).build();
     }
-
+*/
     
     private static final Map<String, String> resetTokens = new HashMap<>();
 
@@ -132,7 +125,7 @@ public class UserController {
         String token = java.util.UUID.randomUUID().toString();
         resetTokens.put(token, username);
 
-        String resetUrl = "http://localhost:8080/EECS4413-E-Commerce-System/reset-password.html?token=" + token;
+        String resetUrl = "http://localhost:8080/ecommerce-auction-system/reset-password.html?token=" + token;
 
         return Response.ok(Map.of(
             "message", "Password reset link generated.",

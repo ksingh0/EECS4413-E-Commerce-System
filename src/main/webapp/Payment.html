@@ -13,6 +13,13 @@
 <header>
     <h1>Payment Page</h1>
 </header>
+	<nav>
+	  <a href="http://localhost:8080/ecommerce-auction-system/catalogue"><button class ="navButton">CATALOGUE</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/create-auction"><button class ="navButton">CREATE AUCTION</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/inbox"><button class ="navButton">INBOX</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/wishlist"><button class ="navButton">WISHLIST</button></a>  
+	  <a href="http://localhost:8080/ecommerce-auction-system/logout"><button class ="navButton">LOGOUT</button></a>
+	</nav>
 <div id = "notification"></div>
 <div class="container">
     <h2>Order Summary</h2>
@@ -61,7 +68,7 @@ const userId = params.get("userId");
 const auctionId = params.get("auctionId");
 
 // Read expeditedShipping flag
-const expeditedShipping = params.get("expeditedShipping") === "true";
+const expeditedShipping = (params.get("expeditedShipping") === "true") ? 1 : 0;
 console.log(auctionId, expeditedShipping); //debug
 
 // Constant fee (adjust if needed)
@@ -92,7 +99,7 @@ $(document).ready(function() {
         success: function(auction){
             // getitem info
 		    $.ajax({
-		        url: "http://localhost:8080/ecommerce-auction-system/api/item/" + auctionId,
+		        url: "http://localhost:8080/ecommerce-auction-system/api/items/" + auctionId,
 		        type: "GET",
 		        success: function(item){
 		            // Add expedited shipping cost
@@ -155,8 +162,9 @@ $("#paymentForm").submit(function(e){
                 $("#paymentMessage").text("Payment submitted, but no ID returned.");
             }
         },
-        error: function(err){
-            console.log(err);
+        error: function(err, jqXHR, textStatus, errorThrown) {
+        	console.error("AJAX Error:", textStatus, errorThrown);
+            console.error("Response Text:", jqXHR.responseText);
             $("#paymentMessage").text("Payment failed.");
         }
     });

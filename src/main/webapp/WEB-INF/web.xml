@@ -29,6 +29,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<init-param>
 			<param-name>jersey.config.server.provider.classnames</param-name>
 			<param-value>org.glassfish.jersey.jackson.JacksonFeature</param-value>
+		</init-param>
+		<init-param>
 			<param-name>jersey.config.server.wadl.disableWadl</param-name>
 			<param-value>true</param-value>
 		</init-param>
@@ -60,11 +62,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<servlet>
 		<servlet-name>Signup</servlet-name>
-		<jsp-file>/Signup.html</jsp-file>
+		<jsp-file>/signup.html</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Signup</servlet-name>
 		<url-pattern>/signup</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>Signin</servlet-name>
+		<jsp-file>/signin.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Signup</servlet-name>
+		<url-pattern>/signin</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -93,17 +104,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Inbox</servlet-name>
 		<url-pattern>/inbox</url-pattern>
 	</servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
-		<welcome-file>Login.html</welcome-file>
-	</welcome-file-list>
-
+	
+		<servlet>
+        <servlet-name>Logout</servlet-name>
+        <jsp-file>/logout.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Logout</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
 
     <!--  SESSION PROTECTION FILTER  -->
     <filter>
@@ -117,7 +126,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </filter-mapping>
 
 
-<!--
+<!-- catch all error page
 	<servlet>
         <servlet-name>404</servlet-name>
         <jsp-file>/404NotFound.html</jsp-file>
@@ -127,9 +136,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>	
 -->
-	
-</web-app>
-		<servlet>
+	<servlet>
 		<servlet-name>Wishlist</servlet-name>
 		<jsp-file>/Wishlist.html</jsp-file>
 	</servlet>
@@ -142,18 +149,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>CataloguePage</servlet-name>
 		<jsp-file>/catalogue.html</jsp-file>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>CataloguePage</servlet-name>
 		<url-pattern>/catalogue</url-pattern>
 	</servlet-mapping>
 	
-	
-		<servlet>
+	<servlet>
 		<servlet-name>ItemPage</servlet-name>
 		<jsp-file>/item.html</jsp-file>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>ItemPage</servlet-name>
 		<url-pattern>/itemDetails/*</url-pattern>

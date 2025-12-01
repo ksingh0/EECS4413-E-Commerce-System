@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>E-Commerce Auction Platform</h1>
+    </header>
+
+    <div class="container">
+        <p> You have been logged out.</p>
+        <a href="http://localhost:8080/ecommerce-auction-system/"><button >Return to home page?</button></a>
+    </div>
+
+    <footer>
+        <p>eCommerce Auction Platform</p>
+    </footer>
+
+  <script>
+
+          $.ajax({
+               url: "http://localhost:8080/ecommerce-auction-system/api/users/logout",
+               type: "POST",
+               contentType: "application/json",
+               data: JSON.stringify({}),
+               success: function(res) {
+              		console.log("Successfully removed session variables");
+               },
+               error: function(res) {console.log(error);}
+           });
+   </script>
+</body>
+
+</html>

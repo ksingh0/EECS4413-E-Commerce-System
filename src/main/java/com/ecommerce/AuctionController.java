@@ -1,6 +1,7 @@
 package com.ecommerce;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -11,6 +12,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  *  AuctionController makes calls to the DAO (GatewayApp) to get auctions from DB
@@ -51,7 +53,10 @@ public class AuctionController {
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public int createAuction(Auction auction) {
-		//call to DAO to create new auction (e.g. newly updated item)
+		if (auction.isEnded()) {
+			//prevent creation of auctions with an endtime in the past (ie already ended)
+			return -1;
+		}
 		return auctionDAO.create(auction);
 	}
 	

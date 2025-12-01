@@ -51,7 +51,7 @@
                 }),
                 success: function(res) {
                     alert("Login successful");
-                    window.location.href = "dashboard.html";
+                    window.location.href = "http://localhost:8080/ecommerce-auction-system/catalogue";
                     sessionStorage.setItem("userId", res.userId);
                 },
                 error: () => alert("Invalid login")
