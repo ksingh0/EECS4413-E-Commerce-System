@@ -39,7 +39,7 @@
 						row.append($("<td></td>").text(auction.id));
 						$.ajax({
 							async:false,
-							url : "http://localhost:8080/EECS4413-E-Commerce-System/api/item/" + auction.itemID,
+							url : "http://localhost:8080/EECS4413-E-Commerce-System/api/items/" + auction.itemID,
 							type : 'GET',
 							success : function(result2) {
 								console.log(result2)
