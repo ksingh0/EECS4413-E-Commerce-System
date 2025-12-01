@@ -12,8 +12,8 @@ public class PaymentDAO {
             INSERT INTO payments (
                 user_id, auction_id, amount, payment_time, status,
                 billing_name, billing_address, city, state, postal_code, country,
-                card_holder_name, card_number, card_type, expiry_date
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                card_holder_name, card_number, card_type, expiry_date, expedited_shipping
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
         int generatedId = -1;
         
@@ -35,7 +35,7 @@ public class PaymentDAO {
             pstmt.setString(13, payment.getCardNumber());
             pstmt.setString(14, payment.getCardType());
             pstmt.setString(15, payment.getExpiryDate());
-
+            pstmt.setInt(16, payment.getExpeditedShipping());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -126,7 +126,8 @@ public class PaymentDAO {
             rs.getString("card_holder_name"),
             rs.getString("card_number"),
             rs.getString("card_type"),
-            rs.getString("expiry_date")
+            rs.getString("expiry_date"),
+            rs.getInt("expedited_shipping")
         );
     }
 }

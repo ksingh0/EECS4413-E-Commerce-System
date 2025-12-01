@@ -39,7 +39,7 @@ $(document).ready(function() {
 
     // Step 1: Fetch payment
     $.ajax({
-        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/payment?id=" + paymentId,
+        url: "http://localhost:8080/ecommerce-auction-system/api/payment?id=" + paymentId,
         type: "GET",
         success: function(payment){
 
@@ -57,7 +57,7 @@ $(document).ready(function() {
 
             // Step 2: Fetch auction details for shipping info
             $.ajax({
-                url: "http://localhost:8080/EECS4413-E-Commerce-System/api/auctions?id=" + payment.auctionId,
+                url: "http://localhost:8080/ecommerce-auction-system/api/auctions?id=" + payment.auctionId,
                 type: "GET",
                 success: function(auction){
                     $("#shippingInfo").html(
@@ -67,9 +67,18 @@ $(document).ready(function() {
                         payment.city + ", " + payment.state + " " + payment.postalCode + "<br>" +
                         payment.country + "<br><br>" +
                         "<strong>Item:</strong> " + auction.itemName + "<br>" +
-                        "<strong>Shipping Time:</strong> " + auction.shippingTime + " days"
+                        "<strong>Shipping Time:</strong> " + item.shipping_time + " days"
                     );
+                    
+                    //upon successful payment: remove item from the catalogue (which then removes associated auction + bids from db)
+                    $.ajax({
+                		url: "http://localhost:8080/ecommerce-auction-system/api/item/" + auctionId,
+                		type: 'DELETE',
+                		success: function(result) {console.log("Item removed from catalogue.");}, 
+                		error: function(error) { console.log(error); }
+         			})
                 },
+                
                 error: function(err){
                     $("#shippingInfo").text("Could not fetch auction shipping details.");
                     console.log(err);
