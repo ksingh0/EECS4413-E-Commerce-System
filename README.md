@@ -31,6 +31,7 @@ The project will run.
 
 
 **ALTERNATIVELY: DEPLOY USING DOCKER**
+
 Dockerhub link: https://hub.docker.com/repositories/nwill0
 
 **Step 1: Go to link above**
