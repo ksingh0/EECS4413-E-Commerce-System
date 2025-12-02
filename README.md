@@ -40,7 +40,10 @@ Dockerhub link: https://hub.docker.com/repositories/nwill0
 It is available in our github repo (and in submitted project folder).
 
 **Step 3: Run docker-compose.yml**
-> Open a terminal and navigate to the location of the docker-compose.yml file
-> Run "docker compose build"
-> Run "docker compuse up -d"
+> Open a terminal and navigate to the location of the docker-compose.yml file.
+> 
+> Run "docker compose build".
+> 
+> Run "docker compuse up -d".
+> 
 > Application should be running on port 8080.
