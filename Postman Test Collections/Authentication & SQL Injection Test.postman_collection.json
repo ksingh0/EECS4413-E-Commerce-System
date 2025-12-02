@@ -1,0 +1,172 @@
+{
+  "info": {
+    "name": "Authentication & SQL Injection Test",
+    "_postman_id": "auth-sql-99999",
+    "description": "Collection to test signup, signin, and SQL injection vulnerabilities",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Signup - Valid User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"test\",\n  \"password\": \"StrongPass123\",\n  \"firstName\": \"Roop\",\n  \"lastName\": \"Kiran\",\n  \"streetNumber\": \"101\",\n  \"streetName\": \"York Blvd\",\n  \"city\": \"Toronto\",\n  \"state\": \"ON\",\n  \"postalCode\": \"M3J1P3\",\n  \"country\": \"Canada\",\n  \"seller\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/users/signup",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["EECS4413-E-Commerce-System", "api", "users", "signup"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+				
+              "pm.test(\"Signup should succeed\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },	 
+	
+		 {
+	    "name": "Signup - Missing LastName",
+	    "request": {
+	      "method": "POST",
+	      "header": [
+	        { "key": "Content-Type", "value": "application/json" }
+	      ],
+	      "body": {
+	        "mode": "raw",
+	        "raw": "{\n  \"username\": \"user2\",\n  \"password\": \"StrongPass123\",\n  \"firstName\": \"Roop\",\n  \"streetNumber\": \"101\",\n  \"streetName\": \"York Blvd\",\n  \"city\": \"Toronto\",\n  \"state\": \"ON\",\n  \"postalCode\": \"M3J1P3\",\n  \"country\": \"Canada\",\n  \"seller\": false\n}"
+	      },
+	      "url": {
+	        "raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/users/signup",
+	        "protocol": "http",
+	        "host": ["localhost"],
+	        "port": "8080",
+	        "path": ["EECS4413-E-Commerce-System", "api", "users", "signup"]
+	      }
+	    },
+	    "event": [
+	      {
+	        "listen": "test",
+	        "script": {
+	          "exec": [
+	            "pm.test(\"Signup should fail due to missing lastName\", function () {",
+	            "    pm.response.to.have.status(400);",
+	            "});"
+	          ]
+	        }
+	      }
+	    ]
+	  },
+    {
+      "name": "Signin - Valid Credentials",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"StrongPass123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/users/signin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["EECS4413-E-Commerce-System", "api", "users", "signin"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login should succeed\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Signin - Invalid Credentials",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"WrongPass\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/users/signin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["EECS4413-E-Commerce-System", "api", "users", "signin"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login should fail\", function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Signin - SQL Injection Attempt",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin' OR '1'='1\",\n  \"password\": \"anything\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/EECS4413-E-Commerce-System/api/users/signin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["EECS4413-E-Commerce-System", "api", "users", "signin"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"SQL injection should fail\", function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
