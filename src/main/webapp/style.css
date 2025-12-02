@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+header {
+	text-align: center;
+}
+
+h1 {
+	color: blue;
+}
+
+body {
+	font-family: "Lato";
+}
+
+button {
+	background-color: lightblue;
+	margin: 15 px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #eeeeff;
+	cursor: pointer;
+}
+
+input[type="submit"] {
+	background-color: lightblue;
+	margin: 10 px;
+}
+
+.container {
+	display: flex;
+	margin: 0 auto;
+	width: 60%;
+}
+
+.column {
+	flex: 1;
+	padding: 15px;
+}
+
+.auction {
+	padding: 10px;
+	margin: 10px;
+}
+
+.item {
+	padding: 10px;
+	margin: 10px;
+}
+
+.notification {
+	color: red;
+	background-color: yellow;
+}
+
+.newAuctionForm {
+	width: 100%;
+}
+
+
+
+

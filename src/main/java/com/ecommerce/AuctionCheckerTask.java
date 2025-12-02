@@ -1,7 +1,9 @@
 package com.ecommerce;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Task to be run every hour to check for auctions ending on that hour. Pings GatewayApp for each auction that has ended, also creates
@@ -16,28 +18,41 @@ public class AuctionCheckerTask implements Runnable {
 	public void run() {
 		AuctionController auctionController = new AuctionController();
 		BidController bidController = new BidController();
+		MessageController msgController = new MessageController();
+		
+		System.out.println("Auction checker task ran");
 		
 		//get all auctions
-		//should remove auctions that are ended otherwise checker will be redundantly checking a lot of auctions ...
-		List<Auction> auctions = auctionController.getAllAuctions(); //could be a direct call to DAO instead ? idk what's better help
+		List<Auction> auctions = auctionController.getAllAuctions(); //could be a direct call to DAO instead ?
 		
 		for (Auction a : auctions) {
-			if (a.isEnded()) {
-				//ping Gateway app - send auction ID
-				int auctionId = a.getId();
-				int itemID = a.getItemID();
-				// **make call to Gateway/DAO to remove item from CatalogueDB**
+			if (a.isEnded() && a.getProcessed() != 1) { //check if auction has ended but is not yet processed
+				int id = a.getId();
+				System.out.println("Auction " + id + " has ended.");
 				
+				// make call to Gateway/DAO to remove item from CatalogueDB**
 				Bid highestBid = bidController.getBid(a.getHighestBidID());
 				
-				List<Bid> allBids = bidController.getAllBids(auctionId); //get all bids from this auction
-				List<Integer> allBidders = new ArrayList<Integer>(); // will have all bidders - errrrr consider using a set/other list type to prevent duplicates
+				List<Bid> allBids = bidController.getAllBids(id); //get all bids from this auction
+				Set<Long> allBidderIds = new HashSet<Long>(); // set of all bidders
+				
 				for (Bid b: allBids) {
-					allBidders.add(b.getUserID());
+					allBidderIds.add(b.getUserID());
 				}
+				
 				// use list of all bidders to notify everyone who bidded on auction 'a'
-				//..........................................................
-				new AuctionPayment(a, highestBid); // for all auctions that have ended, serve payment page
+				String message = "An auction you bidded on has ended: Auction " + id;
+				for (Long userId : allBidderIds) {
+					WebsocketServer.auctionEndedNotification(userId, message);
+					Message msg = new Message();
+					msg.setAuctionId(id);
+					msg.setUserId(userId);
+					msg.setMessage(String.format("An auction you bidded on has ended: Auction %d", id));
+					msgController.postMessage(msg);
+				}
+
+				a.setProcessed(1);
+				auctionController.processAuction(id, a);
 			}
 		}
 		

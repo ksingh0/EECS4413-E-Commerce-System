@@ -22,6 +22,9 @@ public class Payment {
 	private String cardNumber;
 	private String cardType;
 	private String expiryDate; 
+	
+	//expedited shipping
+	private int expeditedShipping;
 
 	public Payment() {
 		// Empty constructor required for Jersey
@@ -43,7 +46,8 @@ public class Payment {
 			String cardHolderName,
 			String cardNumber,
 			String cardType,
-			String expiryDate
+			String expiryDate,
+			int expeditedShipping
 	) {
 		this.paymentId = paymentId;
 		this.userId = userId;
@@ -61,6 +65,7 @@ public class Payment {
 		this.cardNumber = cardNumber;
 		this.cardType = cardType;
 		this.expiryDate = expiryDate;
+		this.expeditedShipping = expeditedShipping;
 	}
     
     // Getters and Setters
@@ -111,4 +116,7 @@ public class Payment {
 
     public String getExpiryDate() { return expiryDate; }
     public void setExpiryDate(String expiryDate) { this.expiryDate = expiryDate; }
+    
+    public int getExpeditedShipping() { return expeditedShipping; }
+    public void setExpeditedShipping() {this.expeditedShipping = expeditedShipping;}
 }

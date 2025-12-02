@@ -1,0 +1,18 @@
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  street_name VARCHAR(255) NOT NULL,
+  street_number VARCHAR(10) NOT NULL,
+<<<<<<< HEAD
+  state VARCHAR(50)NOT NULL,
+=======
+>>>>>>> 11ba0083bd403bf1f233093ed075f6219c91402f
+  city VARCHAR(50) NOT NULL,
+  country VARCHAR(50) NOT NULL,
+  postal_code VARCHAR(10) NOT NULL,
+  is_seller BOOLEAN DEFAULT FALSE
+);
+

@@ -7,7 +7,7 @@ package com.ecommerce;
 public class Bid {
 	private int bidID;
 	private int auctionID;
-	private int userID; //String or int? 
+	private long userID; //String or int? 
 	private long bidTime;
 	private double amount;
 	
@@ -40,7 +40,7 @@ public class Bid {
 		this.auctionID = auctionID;
 	}
 	
-	public void setUserID(int userID) {
+	public void setUserID(long userID) {
 		this.userID = userID;
 	}
 	
@@ -62,7 +62,7 @@ public class Bid {
 		return this.auctionID;
 	}
 	
-	public int getUserID() {
+	public long getUserID() {
 		return this.userID;
 	}
 	

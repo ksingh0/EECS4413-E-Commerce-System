@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Receipt</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src = "notification.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Payment Receipt</h1>
+</header>
+<div id="navBar">
+	<nav>
+	  <a href="http://localhost:8080/ecommerce-auction-system/catalogue"><button class ="navButton">CATALOGUE</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/create-auction"><button class ="navButton">CREATE AUCTION</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/inbox"><button class ="navButton">INBOX</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/wishlist"><button class ="navButton">WISHLIST</button></a>  
+	  <a href="http://localhost:8080/ecommerce-auction-system/logout"><button class ="navButton">LOGOUT</button></a>
+	</nav>
+</div>
+<div id = "notification"></div>
+<div class="container">
+    <h2>Receipt Details</h2>
+    <p id="receiptInfo"></p>
+
+    <h2>Shipping Details</h2>
+    <div id="shippingInfo">
+    	<p id="shippingTime"></p>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025 eCommerce Auction Platform</p>
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const paymentId = params.get("paymentId");
+
+$(document).ready(function() {
+
+    if (!paymentId) {
+        $("#receiptInfo").text("No payment ID provided.");
+        return;
+    }
+
+    // Step 1: Fetch payment
+    $.ajax({
+        url: "http://localhost:8080/ecommerce-auction-system/api/payment?id=" + paymentId,
+        type: "GET",
+        success: function(payment){
+
+            // Read expedited flag
+            const expeditedUsed = payment.expeditedShipping ? "Yes" : "No";
+
+            // Display payment info
+            $("#receiptInfo").html(
+            	"<strong>Full Name:</strong> " + payment.billingName + "<br>" +
+            	"<strong>Address:</strong> " + payment.billingAddress + "<br>" +
+            	"<strong>City:</strong> " + payment.city + "<br>" +
+            	"<strong>State/Province:</strong> " + payment.state + "<br>" +
+            	"<strong>Country:</strong> " + payment.country + "<br>" +
+            	"<strong>Postal Code:</strong> " + payment.postalCode + "<br>" +
+                "<strong>Payment ID:</strong> " + payment.paymentId + "<br>" +
+                "<strong>Amount Paid:</strong> $" + payment.amount + "<br>" +
+                "<strong>Status:</strong> " + payment.status + "<br>" +
+                "<strong>Payment Time:</strong> " + payment.paymentTime + "<br>" +
+                "<strong>Expedited Shipping:</strong> " + expeditedUsed + "<br>"
+            );
+
+            // Step 2: Fetch auction details for shipping info
+            $.ajax({
+                url: "http://localhost:8080/ecommerce-auction-system/api/items/" + payment.auctionId,
+                type: "GET",
+                success: function(item){
+                    $("#shippingTime").html("This item will be shipped in <strong>" + item.shipping_time + "</strong> days.");
+                    
+                    //upon successful payment: remove item from the catalogue (which then removes associated auction + bids from db)
+                    $.ajax({
+                		url: "http://localhost:8080/ecommerce-auction-system/api/items/" + payment.auctionId,
+                		type: 'DELETE',
+                		success: function(result) {console.log("Item removed from catalogue.");}, 
+                		error: function(error) { console.log(error); }
+         			})
+                },
+                
+                error: function(err){
+                    $("#shippingTime").text("Could not fetch auction shipping details.");
+                    console.log(err);
+                }
+            });
+        },
+        error: function(err){
+            $("#receiptInfo").text("Could not fetch payment details.");
+            console.log(err);
+        }
+    });
+});
+</script>
+
+</body>
+</html>

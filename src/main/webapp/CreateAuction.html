@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Auction</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src = "notification.js"></script>
+</head>
+<body>
+	<header><h1>Create New Listing</h1></header>
+		<nav>
+	  <a href="http://localhost:8080/ecommerce-auction-system/catalogue"><button class ="navButton">CATALOGUE</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/create-auction"><button class ="navButton">CREATE AUCTION</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/inbox"><button class ="navButton">INBOX</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/wishlist"><button class ="navButton">WISHLIST</button></a>  
+	  <a href="http://localhost:8080/ecommerce-auction-system/logout"><button class ="navButton">LOGOUT</button></a>
+	</nav>
+	<div id = "notification"></div>
+	<div class = "container">
+		<form id = "newAuctionForm">
+			<label for ="itemName">Item Name:</label><br>
+			<input type ="text" id ="itemName" name ="itemName" required><br> <br>
+			
+			<label for="itemDescriptionInput">Item Description:</label> <br>
+			<textarea rows=3 id = "itemDescriptionInput" name = "itemDescriptionInput" required></textarea><br><br>
+			
+			
+			<label for="startingPrice">Starting Price:</label>
+			<input type="number" id="startingPrice" name="startingPrice" min="0.00" step="0.01" required ><br><br>
+			
+			<label for ="shippingTime">Shipping Time: </label><br>
+			<input type ="number" id ="shippingTime" name ="shippingTime" required><br><br>
+			
+			<label for ="shippingCost">Shipping Cost: </label><br>
+			<input type ="number" id ="shippingCost" name ="shippingCost" min="0.00" step="0.01" required><br><br>
+			
+			<label for ="expeditedShipping">Expedited Shipping Cost: </label><br>
+			<input type ="number" id ="expeditedShipping" name ="expeditedShipping" min="0.00" step="0.01" required><br><br>
+			
+			
+			<label for="type">Auction Type: </label>
+			<select id ="type" name ="type">
+				<option value ="forward" selected>Forward</option>
+			</select>
+			<br>
+			
+			<label for="enddate">End Date: </label>
+			<input type = "date" id = "enddate" name = "enddate" required><br>
+			
+			<label for="endtime">End Time: </label>
+			<input type="time" id="endtime" name="endtime" step = "60" required><br>
+			
+			<br>
+			<input type="submit" value="Create Auction">
+		</form>
+	<p id = confirmationMsg></p>
+	</div>
+	
+<script>
+const enddate = document.getElementById("enddate");
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+
+const todayDateString = year + "-" + month + "-" + day;
+enddate.min = todayDateString;
+console.log(todayDateString);
+
+var userId;
+
+$("#newAuctionForm").submit(function(e) {
+	e.preventDefault();
+	var enddate = $("#enddate").val();
+	var endtime = $("#endtime").val();
+	var endDateTime = enddate + "T" + endtime;
+	const dateObj = new Date(endDateTime);
+	
+	var endTimeEpoch = Math.floor(dateObj.getTime()/1000);
+	var currentTime = Math.floor(Date.now()/1000);
+	
+	var itemData = {
+		item_name: $("#itemName").val(),
+		auction_type: $("#type").val(),
+		item_description: $("#itemDescriptionInput").val(),
+		shipping_time: $("#shippingTime").val(),
+		end_date: enddate,
+		initial_price: $("#startingPrice").val(),
+		shipping_cost: $("#shippingCost").val(),
+		expedited_shipping: $("#expeditedShipping").val()
+	};
+	
+	if (endTimeEpoch <= currentTime) {
+		alert("Auction endtime must be in the future!")
+		return;
+	}
+	
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/items",
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(itemData),
+		success: function(item) {
+			// once item is added to catalogue successfully, add auction
+			
+			var auctionData = {
+				id: item.item_id,
+				endTime: endTimeEpoch
+			};
+			
+			$.ajax({
+				url: "http://localhost:8080/ecommerce-auction-system/api/auctions",
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(auctionData),
+				success: function(result) {
+					
+					$("#confirmationMsg").html("<a href=\"http://localhost:8080/ecommerce-auction-system/auction?id=" + result + "\">Auction</a> created successfully."); //consider adding link to new auction
+				},
+		        error: function(jqXHR, textStatus, errorThrown) {
+		        	$("confirmationMsg").text("error - auction not created."); //give more descriptive error msg. and maybe condition checking.
+		            console.error("AJAX Error:", textStatus, errorThrown);
+		            console.error("Response Text:", jqXHR.responseText);
+		        }
+			});
+			
+		},
+		error: function(error) {$("#confirmationMsg").text("Error adding item");}
+	});
+
+});
+</script>
+</body>
+</html>

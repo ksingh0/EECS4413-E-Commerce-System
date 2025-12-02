@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Manage Users (Admin)</h1>
+    </header>
+
+    <div class="container">
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p style="text-align: center;"><a href="index.html">Back to Home</a></p>
+    </div>
+
+    <footer>
+        <p>eCommerce Auction Platform</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            $.get("http://localhost:8080/ecommerce-auction-system/api/users", function(users) {
+                users.forEach(user => {
+                    const fullName = `${user.firstName} ${user.lastName}`;
+                    const address = `${user.streetNumber} ${user.streetName}`;
+
+                    $("#usersTable tbody").append(
+                        `<tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${fullName}</td>
+                        <td>${address}</td>
+                        <td>${user.city}</td>
+                        <td>${user.country}</td>
+                        <td>
+                            <a href="update-user.html?id=${user.id}">Edit</a> |
+                            <a href="#" onclick="deleteUser(${user.id})">Delete</a>
+                        </td>
+                    </tr>`
+                    );
+                });
+            });
+        });
+
+        function deleteUser(id) {
+            if (confirm("Delete this user?")) {
+                $.ajax({
+                    url: `http://localhost:8080/ecommerce-auction-system/api/users/${id}`,
+                    type: "DELETE",
+                    success: () => location.reload()
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

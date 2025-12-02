@@ -9,23 +9,14 @@ import java.util.Timer;
  
 public class Auction {
 	private int id;
-	private int itemID;
 	private int highestBidID;
 	private double highestPrice;
 	private long endTime;
+	private int processed;
 	
 	public Auction() {
 		//constructor
 	}
-	
-	//other methods
-	public void createTimer() {
-		Timer timer = new Timer();
-		timer.schedule(new AuctionTimerTask(this.id), this.endTime*1000 - System.currentTimeMillis());
-	}
-	
-	//method to cancel timer ... if auction is cancelled? but...how to find the timer...
-	//
 	
 	//check if auction is over - (elsewhere) if true, then users are served a "Pay Now" page.
 	public boolean isEnded() {
@@ -35,10 +26,6 @@ public class Auction {
 	//setters
 	public void setID(int id) {
 		this.id = id;
-	}
-	
-	public void setItemID(int itemID) {
-		this.itemID = itemID;
 	}
 	
 	public void setHighestBidID(int highestBidID) {
@@ -53,13 +40,13 @@ public class Auction {
 		this.endTime = endTime;
 	}
 	
+	public void setProcessed(int processed) {
+		this.processed = processed;
+	}
+	
 	//getters
 	public int getId() {
 		return this.id;
-	}
-	
-	public int getItemID() {
-		return this.itemID;
 	}
 	
 	public int getHighestBidID() {
@@ -72,6 +59,10 @@ public class Auction {
 	
 	public long getEndTime() {
 		return this.endTime;
+	}	
+	
+	public int getProcessed() {
+		return this.processed;
 	}
 }
 

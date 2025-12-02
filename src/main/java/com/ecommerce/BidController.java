@@ -59,20 +59,11 @@ public class BidController {
 		} else if (i==2) {
             return Response.status(400).entity(Map.of("error", "This auction has ended; bids are no longer accepted.")).build();
 		}
-		dao.createBid(bid); 
-		a.setHighestBidID(bid.getBidID());
+		int bidID = dao.createBid(bid); 
+		a.setHighestBidID(bidID);
 		a.setHighestPrice(bid.getAmount());
 		dao.updateAuction(a.getId(), a); //update auction with the new highestBidID and highestPrice
-		return Response.status(201).entity("Bid was successful.").build();
-	}
-	
-	@PUT
-	@Path("/{bidID}")
-	@Consumes (MediaType.APPLICATION_JSON)
-	@Produces (MediaType.APPLICATION_JSON)
-	public void updateBid(@PathParam("bidID") int bidID, Bid bid) {
-		// is there a need to update bids ... ? not really ?
-		// maybe in some exceptional cases ??
+		return Response.status(201).build();
 	}
 	
 	@DELETE
@@ -81,7 +72,6 @@ public class BidController {
 	public void deleteAll(@PathParam("auctionID") int auctionID) {
 		//delete bids - when associated auction gets removed
 		dao.deleteBids(auctionID);
-
 	}
 	
 }

@@ -1,21 +1,162 @@
-<?xml version="1.0" encoding="UTF-8"?>
+	<!-- Jersey Servlet -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
+	
+	<!-- Servlet context listener -->
+	<listener>
+    	<listener-class>com.ecommerce.AuctionManager</listener-class>
+  	</listener>
+	
 	<!-- Jersey Servlet configurations -->
+	<display-name>E-Commerce Auction System</display-name>
+
+    <!-- Default homepage -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
+    <!-- Error page -->
+    <error-page>
+    	<error-code>404</error-code>
+    	<location>/404NotFound.html</location>
+    </error-page>
+
+    <!-- REST Controller -->
 	<servlet>
-		<servlet-name>Jersey REST Service</servlet-name>
+		<servlet-name>JerseyServlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>com.ecommerce</param-value>
 		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.jackson.JacksonFeature</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.wadl.disableWadl</param-name>
+			<param-value>true</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Jersey REST Service</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<servlet-name>JerseyServlet</servlet-name>
+		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
+
+	<!-- Map HTML Pages -->
+	<servlet>
+		<servlet-name>Payment</servlet-name>
+		<jsp-file>/Payment.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Payment</servlet-name>
+		<url-pattern>/payment</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Login</servlet-name>
+		<jsp-file>/Login.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Login</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Signup</servlet-name>
+		<jsp-file>/signup.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Signup</servlet-name>
+		<url-pattern>/signup</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>Signin</servlet-name>
+		<jsp-file>/signin.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Signup</servlet-name>
+		<url-pattern>/signin</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Auction</servlet-name>
+		<jsp-file>/Auction.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Auction</servlet-name>
+		<url-pattern>/auction</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+        <servlet-name>Create Auction</servlet-name>
+        <jsp-file>/CreateAuction.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Create Auction</servlet-name>
+		<url-pattern>/create-auction</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>Inbox</servlet-name>
+        <jsp-file>/inbox.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Inbox</servlet-name>
+		<url-pattern>/inbox</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+        <servlet-name>Logout</servlet-name>
+        <jsp-file>/logout.html</jsp-file>
+   	</servlet>
+	<servlet-mapping>
+		<servlet-name>Logout</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+
+    <!--  SESSION PROTECTION FILTER  -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.ecommerce.AuthFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/*</url-pattern> 
+    </filter-mapping>
+
+	<servlet>
+		<servlet-name>Wishlist</servlet-name>
+		<jsp-file>/Wishlist.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Wishlist</servlet-name>
+		<url-pattern>/wishlist</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CataloguePage</servlet-name>
+		<jsp-file>/catalogue.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CataloguePage</servlet-name>
+		<url-pattern>/catalogue</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ItemPage</servlet-name>
+		<jsp-file>/item.html</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ItemPage</servlet-name>
+		<url-pattern>/itemDetails/*</url-pattern>
+	</servlet-mapping>
+
+
 </web-app>

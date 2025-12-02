@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Inbox</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src = "notification.js"></script>
+</head>
+
+<body>
+<header>
+    <h1>Inbox</h1>
+</header>
+	<nav>
+	  <a href="http://localhost:8080/ecommerce-auction-system/catalogue"><button class ="navButton">CATALOGUE</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/create-auction"><button class ="navButton">CREATE AUCTION</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/inbox"><button class ="navButton">INBOX</button></a> 
+	  <a href="http://localhost:8080/ecommerce-auction-system/wishlist"><button class ="navButton">WISHLIST</button></a>  
+	  <a href="http://localhost:8080/ecommerce-auction-system/logout"><button class ="navButton">LOGOUT</button></a>
+	</nav>
+<div id = "notification"></div>
+<div class="container">
+	<table id ="inboxTable" border="1">
+			<tr>
+			<th>ID</th>
+			<th>AuctionID</th>
+			<th>Message</th>
+			<th>Link</th>
+			<th>Select</th>
+			</tr>
+	</table>
+</div>
+<br>
+<div class="container">
+	<!-- <button>Mark Read</button> -->
+	<button onclick = deleteMessage()>Delete</button>
+</div>
+<script>
+const userId = sessionStorage.getItem("userId");
+
+//get all messages for this user upon page laod
+$(document).ready(function() {
+	$.ajax({
+		url: "http://localhost:8080/ecommerce-auction-system/api/message/all/" + userId,
+		type: 'GET',
+		success: function(result) {
+			var table = $("#inboxTable");
+			result.forEach(function(msg) {
+				var row = $("<tr></tr>");
+				row.append($("<td></td>").text(msg.id));
+				row.append($("<td></td>").text(msg.auctionId));
+				row.append($("<td></td>").text(msg.message));
+				row.append($("<td></td>").html("<a href=\"http://localhost:8080/ecommerce-auction-system/auction?id=" 
+						+ msg.auctionId + "\">Click here</a>"));
+				table.append(row);
+				row.append($("<td></td>").html("<input type=\"checkbox\" class=\"row-checkbox\">"));
+			});
+		}, 
+		error: function(error) { console.log("error getting messages"); }
+	});
+});
+
+
+function deleteMessage() {
+	const inboxBody = document.querySelector("#inboxTable tbody");
+	const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+
+	checkedBoxes.forEach(checkbox => {
+		const row = checkbox.parentNode.parentNode;
+		const messageId = parseInt(row.cells[0].innerText); //get message id - from first cell in the row
+		inboxBody.removeChild(row);
+	    $.ajax({
+	        url: "http://localhost:8080/ecommerce-auction-system/api/message/" + messageId,
+	        type: "DELETE",
+	        success: function() {
+	            console.log("Message deleted");
+	        },
+	        error: function(err) {
+	            console.log(err);
+	        }
+	    });
+	});
+}
+</script>
+</body>
+</html>
